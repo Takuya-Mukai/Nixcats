@@ -118,12 +118,13 @@
           lspsAndRuntimeDeps = {
             # some categories of stuff.
             general = with pkgs; [
+              python313Packages.pynvim
               universal-ctags
               ripgrep
               fd
               nodePackages.nodejs
               delta
-              vimPluginpkgs.nvim-treesitter.withAllGrammars
+              vimPlugins.nvim-treesitter.withAllGrammars
             ];
             python = with pkgs; [
               pyright
@@ -144,13 +145,16 @@
             ];
             rust = with pkgs; [
               rust-analyzer
+              clippy
             ];
             lua = with pkgs; [
               luajitPackages.lua-lsp
+              stylua
             ];
             nix = with pkgs; [
               nil
               nixpkgs-fmt
+              nix-fmt
               deadnix
               statix
             ];
@@ -161,6 +165,7 @@
             sh = with pkgs; [
               bash-language-server
               shfmt
+              shellcheck
             ];
             sqls = with pkgs; [
               sqls
@@ -172,6 +177,7 @@
             yaml = with pkgs; [
               yaml-language-server
               yamllint
+              yq
             ];
             docker = with pkgs; [
               hadolint
@@ -215,7 +221,7 @@
             # :help nixCats.flake.outputs.categoryDefinitions.scheme
             themer =
               with pkgs.vimPlugins;
-              (builtins.getAttr (categories.colorscheme or "catppuccin-mocha") {
+              (builtins.getAttr (categories.colorscheme or "catppuccin") {
                 # Theme switcher without creating a new category
                 "onedark" = onedark-nvim;
                 "catppuccin" = catppuccin-nvim;
@@ -288,7 +294,6 @@
             lsp = with pkgs.vimPlugins; [
               aerial-nvim
               trouble-nvim
-              lspkind-nvim
               nvim-lspconfig
             ];
 
@@ -312,11 +317,12 @@
 
             cmp = with pkgs.vimPlugins; [
               luasnip
+              lspkind-nvim
               blink-cmp
               blink-cmp-git
               blink-cmp-copilot
               blink-cmp-spell
-              colorful-menu-nvim
+              blink-cmp-rg
             ];
 
             ai = with pkgs.vimPlugins; [
@@ -484,7 +490,7 @@
               # you could also pass something else:
               # see :help nixCats
               themer = true;
-              colorscheme = "catppuccin-mocha";
+              colorscheme = "catppuccin";
             };
             extra = {
               # to keep the categories table from being filled with non category things that you want to pass
@@ -535,7 +541,7 @@
               yaml = true;
               docker = true;
               themer = true;
-              colorscheme = "catppuccin-mocha";
+              colorscheme = "catppuccin";
             };
             extra = {
               # nixCats.extra("path.to.val") will perform vim.tbl_get(nixCats.extra, "path" "to" "val")
