@@ -1,163 +1,283 @@
 require("lze").load({
-  {
-    "blink-cmp-copilot",
-    dep_of = "copilot.lua",
-  },
-  {
-    "blink.cmp",
-    dep_of = { "blink-cmp-spell", "blink-cmp-git", "blink-cmp-copilot", "lspkind.nvim", "LuaSnip", "blink-cmp-rg", },
-    event = { "InsertEnter", "CmdlineEnter" },
-    after = function()
-      require("blink-cmp").setup({
-        appearance = {
-          kind_icons = {
-            Class = "󱡠",
-            Color = "󰏘",
-            Constant = "󰏿",
-            Constructor = "󰒓",
-            Copilot = "",
-            Enum = "󰦨",
-            EnumMember = "󰦨",
-            Event = "󱐋",
-            Field = "󰜢",
-            File = "󰈔",
-            Folder = "󰉋",
-            Function = "󰊕",
-            Interface = "󱡠",
-            Keyword = "󰻾",
-            Method = "󰊕",
-            Module = "󰅩",
-            Operator = "󰪚",
-            Property = "󰖷",
-            Reference = "󰬲",
-            Snippet = "󱄽",
-            Struct = "󱡠",
-            Text = "󰉿",
-            TypeParameter = "󰬛",
-            Unit = "󰪚",
-            Value = "󰦨",
-            Variable = "󰆦",
-          },
-        },
-        cmdline = { completion = { menu = { auto_show = true } }, keymap = { preset = "inherit" } },
-        completion = {
-          documentation = { auto_show = true, auto_show_delay_ms = 500, window = { border = "rounded" } },
-          ghost_text = { enabled = true, show_with_menu = true },
-          menu = { auto_show = true, border = "rounded",
-            draw = {
-              kind_icon = {
-                ellipsis = false,
-                text = function(ctx)
-                  return require('lspkind').symbolic(ctx.kind, { mode = 'symbol',})
-                end,
-              }
-            },
-          },
-        },
-        fuzzy = { implementation = "prefer_rust_with_warning" },
-        signature = { window = { border = "rounded" } },
-        sources = {
-          default = { "lsp", "buffer", "snippets", "path", "copilot", "git" },
-          per_filetype = { markdown = { "snippets", "lsp", "path" } },
-          providers = {
-            copilot = {
-              async = true,
-              module = "blink-cmp-copilot",
-              name = "copilot",
-              score_offset = 100,
-              transform_items = function(_, items)
-                local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
-                local kind_idx = #CompletionItemKind + 1
-                CompletionItemKind[kind_idx] = "Copilot"
-                for _, item in ipairs(items) do
-                    item.kind = kind_idx
-                end
-                return items
-              end,
-            },
-            snippets = { preset = 'luasnip' },
-            spell = {
-              name = 'Spell',
-              module = 'blink-cmp-spell',
-              opts = {
-                -- EXAMPLE: Only enable source in `@spell` captures, and disable it
-                -- in `@nospell` captures.
-                enable_in_context = function()
-                  local curpos = vim.api.nvim_win_get_cursor(0)
-                  local captures = vim.treesitter.get_captures_at_pos(
-                    0,
-                    curpos[1] - 1,
-                    curpos[2] - 1
-                  )
-                  local in_spell_capture = false
-                  for _, cap in ipairs(captures) do
-                    if cap.capture == 'spell' then
-                      in_spell_capture = true
-                    elseif cap.capture == 'nospell' then
-                      return false
-                    end
-                  end
-                  return in_spell_capture
-                end,
-              },
-            },
-            git = {
-              enabled = function()
-                return vim.tbl_contains({ 'octo', 'gitcommit', 'markdown' }, vim.bo.filetype)
-              end,
-              module = "blink-cmp-git",
-              name = "Git",
-              score_offset = 100,
-            },
-            ripgrep = {
-              module = "blink-cmp-rg",
-              name = "Ripgrep",
-              -- options below are optional, these are the default values
-              ---@type blink-cmp-rg.Options
-              opts = {
-                -- `min_keyword_length` only determines whether to show completion items in the menu,
-                -- not whether to trigger a search. And we only has one chance to search.
-                prefix_min_len = 3,
-                get_command = function(context, prefix)
-                  return {
-                    "rg",
-                    "--no-config",
-                    "--json",
-                    "--word-regexp",
-                    "--ignore-case",
-                    "--",
-                    prefix .. "[\\w_-]+",
-                    vim.fs.root(0, ".git") or vim.fn.getcwd(),
-                  }
-                end,
-                get_prefix = function(context)
-                  return context.line:sub(1, context.cursor[2]):match("[%w_-]+$") or ""
-                end,
-              },
-            },
-          },
-          fuzzy = {
-            sorts = {
-              function(a, b)
-                local sort = require('blink.cmp.fuzzy.sort')
-                if a.source_id == 'spell' and b.source_id == 'spell' then
-                  return sort.label(a, b)
-                end
-              end,
-              'score',
-              'sort_text',
-              'label',
-            },
-          },
-        },
-      })
-    end,
-  },
-  {
-    "copilot.lua",
-    after = function()
-      require("copilot").setup({ panel = { enabled = false }, suggestion = { enabled = false } })
-    end,
-    event = { "InsertEnter", "CmdlineEnter" },
-  },
+	{
+		"blink-cmp-copilot",
+		dep_of = { "blink.cmp" },
+		lazy = true,
+	},
+	{
+		"copilot.lua",
+		dep_of = { "blink-cmp-copilot" },
+		lazy = true,
+		after = function()
+			require("copilot").setup({ panel = { enabled = false }, suggestion = { enabled = false } })
+		end,
+	},
+	{
+		"blink-cmp-spell",
+		dep_of = { "blink.cmp" },
+		lazy = true,
+	},
+	{
+		"blink-cmp-git",
+		dep_of = { "blink.cmp" },
+		lazy = true,
+	},
+	{
+		"blink-ripgrep.nvim",
+		dep_of = { "blink.cmp" },
+		lazy = true,
+	},
+	{
+		"blink-cmp-dictionary",
+		dep_of = { "blink.cmp" },
+	},
+	{
+		"friendly-snippets",
+		dep_of = { "blink.cmp" },
+		lazy = true,
+	},
+	{
+		"luasnip",
+		dep_of = { "blink.cmp" },
+		-- dep_of = "friendly-snippets",
+		after = function()
+			require("luasnip").config.setup({
+				history = true,
+				updateevents = "TextChanged,TextChangedI",
+			})
+			require("luasnip.loaders.from_vscode").lazy_load()
+		end,
+		lazy = true,
+	},
+	{
+		"lspkind.nvim",
+		dep_of = { "blink.cmp" },
+	},
+	{
+		"blink.cmp",
+		-- dep_of = {
+		-- 	"blink-cmp-ripgrep",
+		-- 	"blink-cmp-spell",
+		-- 	"blink-cmp-git",
+		-- 	"blink-cmp-copilot",
+		-- 	"lspkind.nvim",
+		-- 	"luasnip",
+		-- 	"blink-ripgrep.nvim",
+		-- },
+		event = { "InsertEnter", "CmdlineEnter" },
+		after = function()
+			local spell_enabled_cache = {}
+
+			vim.api.nvim_create_autocmd("OptionSet", {
+				group = vim.api.nvim_create_augroup("blink_cmp_spell", {}),
+				desc = "Reset the cache for enabling the spell source for blink.cmp.",
+				pattern = "spelllang",
+				callback = function()
+					spell_enabled_cache[vim.fn.bufnr()] = nil
+				end,
+			})
+			require("blink-cmp").setup({
+				enabled = function()
+					return not vim.tbl_contains({ "dap-repl" }, vim.bo.filetype)
+				end,
+				cmdline = {
+					enabled = true,
+					-- use 'inherit' to inherit mappings from top level `keymap` config
+					keymap = { preset = "inherit" },
+					sources = { "buffer", "cmdline" },
+
+					-- OR explicitly configure per cmd type
+					-- This ends up being equivalent to above since the sources disable themselves automatically
+					-- when not available. You may override their `enabled` functions via
+					-- `sources.providers.cmdline.override.enabled = function() return your_logic end`
+
+					-- sources = function()
+					--   local type = vim.fn.getcmdtype()
+					--   -- Search forward and backward
+					--   if type == '/' or type == '?' then return { 'buffer' } end
+					--   -- Commands
+					--   if type == ':' or type == '@' then return { 'cmdline', 'buffer' } end
+					--   return {}
+					-- end,
+
+					completion = {
+						trigger = {
+							show_on_blocked_trigger_characters = {},
+							show_on_x_blocked_trigger_characters = {},
+						},
+						list = {
+							selection = {
+								-- When `true`, will automatically select the first item in the completion list
+								preselect = true,
+								-- When `true`, inserts the completion item automatically when selecting it
+								auto_insert = true,
+							},
+						},
+						-- Whether to automatically show the window when new completion items are available
+						-- Default is false for cmdline, true for cmdwin (command-line window)
+						menu = {
+							auto_show = true,
+						},
+						-- Displays a preview of the selected item on the current line
+						ghost_text = { enabled = true },
+					},
+				},
+				term = {
+					enabled = true,
+					keymap = { preset = "inherit" }, -- Inherits from top level `keymap` config when not set
+					sources = {},
+					completion = {
+						trigger = {
+							show_on_blocked_trigger_characters = {},
+							show_on_x_blocked_trigger_characters = nil, -- Inherits from top level `completion.trigger.show_on_blocked_trigger_characters` config when not set
+						},
+						-- Inherits from top level config options when not set
+						list = {
+							selection = {
+								-- When `true`, will automatically select the first item in the completion list
+								preselect = nil,
+								-- When `true`, inserts the completion item automatically when selecting it
+								auto_insert = nil,
+							},
+						},
+						-- Whether to automatically show the window when new completion items are available
+						menu = { auto_show = nil },
+						-- Displays a preview of the selected item on the current line
+						ghost_text = { enabled = nil },
+					},
+				},
+				appearance = {
+					-- Blink does not expose its default kind icons so you must copy them all (or set your custom ones) and add Copilot
+					kind_icons = {
+						Class = "󱡠",
+						Color = "󰏘",
+						Constant = "󰏿",
+						Constructor = "󰒓",
+						Copilot = "",
+						Enum = "󰦨",
+						EnumMember = "󰦨",
+						Event = "󱐋",
+						Field = "󰜢",
+						File = "󰈔",
+						Folder = "󰉋",
+						Function = "󰊕",
+						Interface = "󱡠",
+						Keyword = "󰻾",
+						Method = "󰊕",
+						Module = "󰅩",
+						Operator = "󰪚",
+						Property = "󰖷",
+						Reference = "󰬲",
+						Snippet = "󱄽",
+						Struct = "󱡠",
+						Text = "󰉿",
+						TypeParameter = "󰬛",
+						Unit = "󰪚",
+						Value = "󰦨",
+					},
+				},
+
+				fuzzy = {
+					sorts = {
+						function(a, b)
+							local sort = require("blink.cmp.fuzzy.sort")
+							if a.source_id == "spell" and b.source_id == "spell" then
+								return sort.label(a, b)
+							end
+						end,
+						-- This is the normal default order, which we fall back to
+						"score",
+						"kind",
+						"label",
+					},
+					implementation = "prefer_rust_with_warning",
+				},
+
+				sources = {
+					-- Remove 'buffer' if you don't want text completions, by default it's only enabled when LSP returns no items
+					default = {
+						"lsp",
+						"path",
+						"snippets",
+						"buffer",
+						"ripgrep",
+						"git",
+						"copilot",
+						"spell",
+					},
+					providers = {
+						ripgrep = {
+							name = "Ripgrep",
+							module = "blink-ripgrep",
+							-- see the full configuration below for all available options
+							---@module "blink-ripgrep"
+							---@type blink-ripgrep.Options
+							opts = {},
+						},
+						copilot = {
+							name = "Copilot",
+							module = "blink-cmp-copilot",
+							score_offset = 100,
+							async = true,
+						},
+						git = {
+							name = "Git",
+							module = "blink-cmp-git",
+							opts = {
+								-- options for the blink-cmp-git
+							},
+						},
+						spell = {
+							name = "Spell",
+							module = "blink-cmp-spell",
+							enabled = true,
+						},
+					},
+				},
+				snippets = { preset = "luasnip" },
+				signature = { window = { border = "rounded" } },
+				completion = {
+					documentation = { window = { border = "rounded" } },
+					menu = {
+						border = "rounded",
+						draw = {
+							components = {
+								kind_icon = {
+									text = function(ctx)
+										local icon = ctx.kind_icon
+										if vim.tbl_contains({ "Path" }, ctx.source_name) then
+											local dev_icon, _ = require("nvim-web-devicons").get_icon(ctx.label)
+											if dev_icon then
+												icon = dev_icon
+											end
+										else
+											icon = require("lspkind").symbolic(ctx.kind, {
+												mode = "symbol",
+											})
+										end
+
+										return icon .. ctx.icon_gap
+									end,
+
+									-- Optionally, use the highlight groups from nvim-web-devicons
+									-- You can also add the same function for `kind.highlight` if you want to
+									-- keep the highlight groups in sync with the icons.
+									highlight = function(ctx)
+										local hl = ctx.kind_hl
+										if vim.tbl_contains({ "Path" }, ctx.source_name) then
+											local dev_icon, dev_hl = require("nvim-web-devicons").get_icon(ctx.label)
+											if dev_icon then
+												hl = dev_hl
+											end
+										end
+										return hl
+									end,
+								},
+							},
+						},
+					},
+				},
+			})
+		end,
+	},
 })

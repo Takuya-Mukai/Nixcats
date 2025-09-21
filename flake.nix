@@ -1,4 +1,4 @@
-# Copyright (c) 2023 BirdeeHub
+# Copyright (c) 2023 BirdeeHubflake.nix
 # Licensed under the MIT license
 
 # Welcome to the main example config of nixCats!
@@ -64,7 +64,7 @@
       # will not apply to module imports
       # as that will have your system values
       extra_pkg_config = {
-        # allowUnfree = true;
+        allowUnfree = true;
       };
       # management of the system variable is one of the harder parts of using flakes.
 
@@ -97,13 +97,14 @@
       # and
       # :help nixCats.flake.outputs.categoryDefinitions.scheme
       categoryDefinitions =
-        { pkgs
-        , settings
-        , categories
-        , extra
-        , name
-        , mkPlugin
-        , ...
+        {
+          pkgs,
+          settings,
+          categories,
+          extra,
+          name,
+          mkPlugin,
+          ...
         }@packageDef:
         {
           # to define and use a new category, simply add a new list to a set here,
@@ -119,12 +120,11 @@
             # some categories of stuff.
             general = with pkgs; [
               python313Packages.pynvim
+              python313Packages.debugpy
               universal-ctags
               ripgrep
               fd
-              nodePackages.nodejs
               delta
-              vimPlugins.nvim-treesitter.withAllGrammars
             ];
             python = with pkgs; [
               pyright
@@ -154,13 +154,14 @@
             nix = with pkgs; [
               nil
               nixpkgs-fmt
-              nix-fmt
+              nixfmt
               deadnix
               statix
             ];
             cpp = with pkgs; [
               clang-tools
               cppcheck
+              vscode-extensions.ms-vscode.cpptools
             ];
             sh = with pkgs; [
               bash-language-server
@@ -184,17 +185,17 @@
             ];
 
             # per nvim package you export
-            debug = with pkgs; {
-              # go = [ delve ];
-            };
-            # and easily check if they are included in lua
-            format = with pkgs; [
-            ];
-            neonixdev = {
-              # also you can do this.
-              inherit (pkgs) nix-doc lua-language-server nixd;
-              # and each will be its own sub category
-            };
+            # debug = with pkgs; {
+            #   # go = [ delve ];
+            # };
+            # # and easily check if they are included in lua
+            # format = with pkgs; [
+            # ];
+            # neonixdev = {
+            #   # also you can do this.
+            #   inherit (pkgs) nix-doc lua-language-server nixd;
+            #   # and each will be its own sub category
+            # };
           };
 
           # This is for plugins that will load at startup without using packadd:
@@ -240,8 +241,9 @@
             # あなたのカテゴリ分けに合わせてプラグインを配置
             ui = with pkgs.vimPlugins; [
               # treesitter本体と関連プラグイン
-              nvim-treesitter
-              treesitter-context
+              # nvim-treesitter
+              nvim-treesitter.withAllGrammars
+              nvim-treesitter-context
               nvim-treesitter-textobjects
               nvim-treesitter-refactor
 
@@ -253,9 +255,9 @@
               lualine-nvim
               neoscroll-nvim
               nvim-web-devicons
-              scrollview-nvim
+              nvim-scrollview
               hlchunk-nvim
-              hlargs-nvim
+              # hlargs-nvim
             ];
 
             edit = with pkgs.vimPlugins; [
@@ -265,13 +267,15 @@
             ];
 
             tool = with pkgs.vimPlugins; [
+              vim-startuptime
               which-key-nvim
               toggleterm-nvim
               diffview-nvim
-              oil-nvim
-              oil-git-signs-nvim
-              # telescope本体と高速化のための拡張
+              # oil-nvim
+              # oil-git-status-nvim
+              snacks-nvim
               undotree
+              # telescope本体と高速化のための拡張
               telescope-nvim
               telescope-fzf-native-nvim
               telescope-ui-select-nvim
@@ -280,6 +284,7 @@
 
             notification = with pkgs.vimPlugins; [
               noice-nvim
+              nvim-notify
               fidget-nvim
             ];
 
@@ -287,6 +292,8 @@
               default = [
                 nvim-dap
                 nvim-dap-ui
+                nvim-nio
+                lazydev-nvim
                 nvim-dap-virtual-text
               ];
             };
@@ -316,18 +323,17 @@
             };
 
             cmp = with pkgs.vimPlugins; [
+              friendly-snippets
               luasnip
               lspkind-nvim
               blink-cmp
               blink-cmp-git
               blink-cmp-copilot
               blink-cmp-spell
-              blink-cmp-rg
-            ];
-
-            ai = with pkgs.vimPlugins; [
+              blink-ripgrep-nvim
               copilot-lua
             ];
+
           };
           # optionalPlugins = {
           #   neonixdev = with pkgs.vimPlugins; [
@@ -341,7 +347,6 @@
           #       comment-nvim
           #       undotree
           #       indent-blankline-nvim
-          #       vim-startuptime
           #       # If it was included in your flake inputs as plugins-hlargs,
           #       # this would be how to add that plugin in your config.
           #       # pkgs.neovimPlugins.hlargs
@@ -471,14 +476,35 @@
             };
             # enable the categories you want from categoryDefinitions
             categories = {
-              markdown = true;
+
               general = true;
-              lint = true;
-              format = true;
-              neonixdev = true;
-              test = {
-                subtest1 = true;
+              python = true;
+              markdown = true;
+              typescript = true;
+              rust = true;
+              lua = true;
+              nix = true;
+              cpp = true;
+              sh = true;
+              sql = true;
+              typst = true;
+              yaml = true;
+              docker = true;
+
+              ui = true;
+              edit = true;
+              tool = true;
+              notification = true;
+              debug = {
+                default = true;
               };
+              lsp = true;
+              code-quality = true;
+              lang = {
+                typst = true;
+                markdown = true;
+              };
+              cmp = true;
 
               # enabling this category will enable the go category,
               # and ALSO debug.go and debug.default due to our extraCats in categoryDefinitions.
@@ -592,57 +618,53 @@
       # so you can yourpackage.homeModule and then the namespace would be that packages name.
     in
     # you shouldnt need to change much past here, but you can if you wish.
-      # but you should at least eventually try to figure out whats going on here!
-      # see :help nixCats.flake.outputs.exports
-    forEachSystem
-      (
-        system:
-        let
-          # and this will be our builder! it takes a name from our packageDefinitions as an argument, and builds an nvim.
-          nixCatsBuilder = utils.baseBuilder luaPath
-            {
-              # we pass in the things to make a pkgs variable to build nvim with later
-              inherit
-                nixpkgs
-                system
-                dependencyOverlays
-                extra_pkg_config
-                ;
-              # and also our categoryDefinitions and packageDefinitions
-            }
-            categoryDefinitions
-            packageDefinitions;
-          # call it with our defaultPackageName
-          defaultPackage = nixCatsBuilder defaultPackageName;
+    # but you should at least eventually try to figure out whats going on here!
+    # see :help nixCats.flake.outputs.exports
+    forEachSystem (
+      system:
+      let
+        # and this will be our builder! it takes a name from our packageDefinitions as an argument, and builds an nvim.
+        nixCatsBuilder = utils.baseBuilder luaPath {
+          # we pass in the things to make a pkgs variable to build nvim with later
+          inherit
+            nixpkgs
+            system
+            dependencyOverlays
+            extra_pkg_config
+            ;
+          # and also our categoryDefinitions and packageDefinitions
+        } categoryDefinitions packageDefinitions;
+        # call it with our defaultPackageName
+        defaultPackage = nixCatsBuilder defaultPackageName;
 
-          # this pkgs variable is just for using utils such as pkgs.mkShell
-          # within this outputs set.
-          pkgs = import nixpkgs { inherit system; };
-          # The one used to build neovim is resolved inside the builder
-          # and is passed to our categoryDefinitions and packageDefinitions
-        in
-        {
-          # these outputs will be wrapped with ${system} by utils.eachSystem
+        # this pkgs variable is just for using utils such as pkgs.mkShell
+        # within this outputs set.
+        pkgs = import nixpkgs { inherit system; };
+        # The one used to build neovim is resolved inside the builder
+        # and is passed to our categoryDefinitions and packageDefinitions
+      in
+      {
+        # these outputs will be wrapped with ${system} by utils.eachSystem
 
-          # this will generate a set of all the packages
-          # in the packageDefinitions defined above
-          # from the package we give it.
-          # and additionally output the original as default.
-          packages = utils.mkAllWithDefault defaultPackage;
+        # this will generate a set of all the packages
+        # in the packageDefinitions defined above
+        # from the package we give it.
+        # and additionally output the original as default.
+        packages = utils.mkAllWithDefault defaultPackage;
 
-          # choose your package for devShell
-          # and add whatever else you want in it.
-          devShells = {
-            default = pkgs.mkShell {
-              name = defaultPackageName;
-              packages = [ defaultPackage ];
-              inputsFrom = [ ];
-              shellHook = '''';
-            };
+        # choose your package for devShell
+        # and add whatever else you want in it.
+        devShells = {
+          default = pkgs.mkShell {
+            name = defaultPackageName;
+            packages = [ defaultPackage ];
+            inputsFrom = [ ];
+            shellHook = '''';
           };
+        };
 
-        }
-      )
+      }
+    )
     // (
       let
         # we also export a nixos module to allow reconfiguration from configuration.nix
@@ -678,13 +700,9 @@
 
         # this will make an overlay out of each of the packageDefinitions defined above
         # and set the default overlay to the one named here.
-        overlays = utils.makeOverlays luaPath
-          {
-            inherit nixpkgs dependencyOverlays extra_pkg_config;
-          }
-          categoryDefinitions
-          packageDefinitions
-          defaultPackageName;
+        overlays = utils.makeOverlays luaPath {
+          inherit nixpkgs dependencyOverlays extra_pkg_config;
+        } categoryDefinitions packageDefinitions defaultPackageName;
 
         nixosModules.default = nixosModule;
         homeModules.default = homeModule;

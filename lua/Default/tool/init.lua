@@ -1,20 +1,171 @@
 
 require('lze').load {
   {
-    "lazygit.nvim",
-    dep_of = "plenary.nvim",
-    after = function(_)
+    "snacks.nvim",
+    priority = 1000,
+    lazy = false,
+    ---@type snacks.Config
+    after = function()
+      require("snacks").setup({
+        bigfile = { enabled = true },
+        -- dashboard = { enabled = true },
+        explorer = { enabled = true },
+        indent = { enabled = false },
+        input = { enabled = true },
+        notifier = {
+          enabled = true,
+          timeout = 3000,
+        },
+        picker = { enabled = true },
+        quickfile = { enabled = true },
+        scope = { enabled = true },
+        scroll = {
+          enabled = true,
+          animate = {
+            duration = { step = 15, total = 250 },
+            easing = "linear",
+          },
+        },
+        statuscolumn = { enabled = true },
+        words = { enabled = true },
+        styles = {
+          notification = {
+            wo = { wrap = true } -- Wrap notifications
+          },
+        }
+      })
     end,
-    cmd = {
-      "LazyGit",
-      "LazyGitConfig",
-      "LazyGitCurrentFile",
-      "LazyGitFilter",
-      "LazyGitFilterCurrentFile",
-    },
     keys = {
-      { "<leader>gg", "<cmd>LazyGit<cr>", desc = "LazyGit" },
+      -- Top Pickers & Explorer
+      { "<leader><space>", function() Snacks.picker.smart() end, desc = "Smart Find Files" },
+      { "<leader>,", function() Snacks.picker.buffers() end, desc = "Buffers" },
+      { "<leader>/", function() Snacks.picker.grep() end, desc = "Grep" },
+      { "<leader>:", function() Snacks.picker.command_history() end, desc = "Command History" },
+      { "<leader>n", function() Snacks.picker.notifications() end, desc = "Notification History" },
+      { "<leader>e", function() Snacks.explorer() end, desc = "File Explorer" },
+      -- find
+      { "<leader>fb", function() Snacks.picker.buffers() end, desc = "Buffers" },
+      { "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
+      { "<leader>ff", function() Snacks.picker.files() end, desc = "Find Files" },
+      { "<leader>fg", function() Snacks.picker.git_files() end, desc = "Find Git Files" },
+      { "<leader>fp", function() Snacks.picker.projects() end, desc = "Projects" },
+      { "<leader>fr", function() Snacks.picker.recent() end, desc = "Recent" },
+      -- git
+      { "<leader>gb", function() Snacks.picker.git_branches() end, desc = "Git Branches" },
+      { "<leader>gl", function() Snacks.picker.git_log() end, desc = "Git Log" },
+      { "<leader>gL", function() Snacks.picker.git_log_line() end, desc = "Git Log Line" },
+      { "<leader>gs", function() Snacks.picker.git_status() end, desc = "Git Status" },
+      { "<leader>gS", function() Snacks.picker.git_stash() end, desc = "Git Stash" },
+      { "<leader>gd", function() Snacks.picker.git_diff() end, desc = "Git Diff (Hunks)" },
+      { "<leader>gf", function() Snacks.picker.git_log_file() end, desc = "Git Log File" },
+      -- Grep
+      { "<leader>sb", function() Snacks.picker.lines() end, desc = "Buffer Lines" },
+      { "<leader>sB", function() Snacks.picker.grep_buffers() end, desc = "Grep Open Buffers" },
+      { "<leader>sg", function() Snacks.picker.grep() end, desc = "Grep" },
+      { "<leader>sw", function() Snacks.picker.grep_word() end, desc = "Visual selection or word", mode = { "n", "x" } },
+      -- search
+      { '<leader>s"', function() Snacks.picker.registers() end, desc = "Registers" },
+      { '<leader>s/', function() Snacks.picker.search_history() end, desc = "Search History" },
+      { "<leader>sa", function() Snacks.picker.autocmds() end, desc = "Autocmds" },
+      { "<leader>sb", function() Snacks.picker.lines() end, desc = "Buffer Lines" },
+      { "<leader>sc", function() Snacks.picker.command_history() end, desc = "Command History" },
+      { "<leader>sC", function() Snacks.picker.commands() end, desc = "Commands" },
+      { "<leader>sd", function() Snacks.picker.diagnostics() end, desc = "Diagnostics" },
+      { "<leader>sD", function() Snacks.picker.diagnostics_buffer() end, desc = "Buffer Diagnostics" },
+      { "<leader>sh", function() Snacks.picker.help() end, desc = "Help Pages" },
+      { "<leader>sH", function() Snacks.picker.highlights() end, desc = "Highlights" },
+      { "<leader>si", function() Snacks.picker.icons() end, desc = "Icons" },
+      { "<leader>sj", function() Snacks.picker.jumps() end, desc = "Jumps" },
+      { "<leader>sk", function() Snacks.picker.keymaps() end, desc = "Keymaps" },
+      { "<leader>sl", function() Snacks.picker.loclist() end, desc = "Location List" },
+      { "<leader>sm", function() Snacks.picker.marks() end, desc = "Marks" },
+      { "<leader>sM", function() Snacks.picker.man() end, desc = "Man Pages" },
+      { "<leader>sp", function() Snacks.picker.lazy() end, desc = "Search for Plugin Spec" },
+      { "<leader>sq", function() Snacks.picker.qflist() end, desc = "Quickfix List" },
+      { "<leader>sR", function() Snacks.picker.resume() end, desc = "Resume" },
+      { "<leader>su", function() Snacks.picker.undo() end, desc = "Undo History" },
+      { "<leader>uC", function() Snacks.picker.colorschemes() end, desc = "Colorschemes" },
+      -- LSP
+      { "gd", function() Snacks.picker.lsp_definitions() end, desc = "Goto Definition" },
+      { "gD", function() Snacks.picker.lsp_declarations() end, desc = "Goto Declaration" },
+      { "gr", function() Snacks.picker.lsp_references() end, nowait = true, desc = "References" },
+      { "gI", function() Snacks.picker.lsp_implementations() end, desc = "Goto Implementation" },
+      { "gy", function() Snacks.picker.lsp_type_definitions() end, desc = "Goto T[y]pe Definition" },
+      { "<leader>ss", function() Snacks.picker.lsp_symbols() end, desc = "LSP Symbols" },
+      { "<leader>sS", function() Snacks.picker.lsp_workspace_symbols() end, desc = "LSP Workspace Symbols" },
+      -- Other
+      { "<leader>z",  function() Snacks.zen() end, desc = "Toggle Zen Mode" },
+      { "<leader>Z",  function() Snacks.zen.zoom() end, desc = "Toggle Zoom" },
+      { "<leader>.",  function() Snacks.scratch() end, desc = "Toggle Scratch Buffer" },
+      { "<leader>S",  function() Snacks.scratch.select() end, desc = "Select Scratch Buffer" },
+      { "<leader>n",  function() Snacks.notifier.show_history() end, desc = "Notification History" },
+      { "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
+      { "<leader>cR", function() Snacks.rename.rename_file() end, desc = "Rename File" },
+      { "<leader>gB", function() Snacks.gitbrowse() end, desc = "Git Browse", mode = { "n", "v" } },
+      { "<leader>gg", function() Snacks.lazygit() end, desc = "Lazygit" },
+      { "<leader>un", function() Snacks.notifier.hide() end, desc = "Dismiss All Notifications" },
+      { "<c-/>",      function() Snacks.terminal() end, desc = "Toggle Terminal" },
+      { "<c-_>",      function() Snacks.terminal() end, desc = "which_key_ignore" },
+      { "]]",         function() Snacks.words.jump(vim.v.count1) end, desc = "Next Reference", mode = { "n", "t" } },
+      { "[[",         function() Snacks.words.jump(-vim.v.count1) end, desc = "Prev Reference", mode = { "n", "t" } },
+      {
+        "<leader>N",
+        desc = "Neovim News",
+        function()
+          Snacks.win({
+            file = vim.api.nvim_get_runtime_file("doc/news.txt", false)[1],
+            width = 0.6,
+            height = 0.6,
+            wo = {
+              spell = false,
+              wrap = false,
+              signcolumn = "yes",
+              statuscolumn = " ",
+              conceallevel = 3,
+            },
+          })
+        end,
+      }
     },
+    init = function()
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "VeryLazy",
+        callback = function()
+          -- Setup some globals for debugging (lazy-loaded)
+          _G.dd = function(...)
+            Snacks.debug.inspect(...)
+          end
+          _G.bt = function()
+            Snacks.debug.backtrace()
+          end
+
+          -- Override print to use snacks for `:=` command
+          if vim.fn.has("nvim-0.11") == 1 then
+            vim._print = function(_, ...)
+              dd(...)
+            end
+          else
+            vim.print = _G.dd 
+          end
+
+          -- Create some toggle mappings
+          Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>us")
+          Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")
+          Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>uL")
+          Snacks.toggle.diagnostics():map("<leader>ud")
+          Snacks.toggle.line_number():map("<leader>ul")
+          Snacks.toggle.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 }):map("<leader>uc")
+          Snacks.toggle.treesitter():map("<leader>uT")
+          Snacks.toggle.option("background", { off = "light", on = "dark", name = "Dark Background" }):map("<leader>ub")
+          Snacks.toggle.inlay_hints():map("<leader>uh")
+          Snacks.toggle.indent():map("<leader>ug")
+          Snacks.toggle.dim():map("<leader>uD")
+        end,
+      })
+    end,
+  },
+  {
+    "vim-startuptime",
   },
   {
     "which-key.nvim",
@@ -32,8 +183,8 @@ require('lze').load {
         { "<leader>g", group = "Git" },
         { "<leader>h", group = "Gitsigns" },
         { "<leader>l", group = "LSP" },
-        { "g", group = "Move" },
-        { "<leader>o", group = "Oil" },
+        -- { "g", group = "Move" },
+        -- { "<leader>o", group = "Oil" },
         { "<leader>s", group = "Surround" },
 
         { "<leader>sy", group = "Add surround" },
@@ -48,232 +199,14 @@ require('lze').load {
         { "<leader>sc", group = "Change surround" },
         { "<leader>sc'", desc = "' → \"              [cs'\"]" },
         { "<leader>sct", desc = "<tag> → <h1>       [cst]" },
-        { "<leader>f", group = "Telescope" },
-        { "<leader>y", group = "Yazi" },
-        { "<leader>t", group = "Terminal" },
-        { "<leader>tt", group = "Open Terminal" },
+        -- { "<leader>f", group = "Telescope" },
+        -- { "<leader>y", group = "Yazi" },
+        -- { "<leader>t", group = "Terminal" },
+        -- { "<leader>tt", group = "Open Terminal" },
         { "<leader>rg", group = "Navigation" },
         { "<leader>rl", group = "List definition" },
         { "<leader>x", group = "Trouble" },
       }
     end,
-  },
-  {
-    "yazi.nvim",
-    keys = {
-      {"<leader>y-", "<CMD>Yazi<CR>", mode = "n", desc = "Open at the current File" },
-      {"<leader>yc", "<CMD>Yazi cwd<CR>", mode = "n", desc = "Open at the current working directory" },
-      {"<leader>yt", "<CMD>Yazi toggle<CR>", mode = "n", desc = "Resume the last session" },
-    },
-    dep_of = "plenary.nvim",
-  },
-  {
-    "toggleterm.nvim",
-    keys = {
-      {"<leader>tt", "<cmd>ToggleTerm direction=float<CR>", desc = "Open Default" },
-      { "<leader>tr", "<cmd>ToggleTerm direction=vertical<CR>", desc = "Open REPL" },
-      { "<leader>tv", "<cmd>lua require('toggleterm').send_lines_to_terminal('visual_selection', false)<CR>", desc = "Send selected lines" },
-    },
-    cmd = { "ToggleTerm", "TermExec", "ToggleTermSendCurrentLine", "ToggleTermSendVisualSelection" },
-    after = function(_)
-      require("toggleterm").setup({
-       direction = "float",
-        float_opts = {
-          border = "rounded",
-          width = function()
-              return math.floor(vim.o.columns * 0.9)
-          end,
-          height = function()
-              return math.floor(vim.o.lines * 0.45)
-          end,
-          row = 1,
-          col = function()
-              return math.floor((vim.o.columns - vim.o.columns * 0.9) / 2)
-          end,
-          winblend = 20,
-          zindex = 150,
-          title_pos = "center",
-        },
-        hide_numbers = true,
-        insert_mappings = true,
-        start_in_insert = true,
-        size = function(term)
-          if term.direction == "horizontal" then
-            return 13
-          elseif term.direction == "vertical" then
-            return vim.o.columns * 0.3
-          end
-        end,
-      })
-    end,
-  },
-  {
-    "diffview.nvim",
-    after = function(_)
-      require("diffview").setup({ use_icons = true })
-    end,
-    keys = {
-      { "<leader>gd", "<cmd>DiffviewOpen<CR>", mode = "", desc = "Open Diffview", silent = true },
-    },
-    cmd ={
-      "DiffviewOpen", "DiffviewClose", "DiffviewToggleFiles", "DiffviewFocusFiles", "DiffviewRefresh",
-    },
-  },
-  {
-    "oil-git-status.nvim",
-    after = function(_)
-      require("oil-git-status").setup({})
-    end,
-  },
-  {
-    "oil.nvim",
-    dep_of = "oil-git-status.nvim",
-    event = { "DeferredUIEnter" },
-    keys = {
-      { "<leader>ol", function() vim.cmd("topleft vertical 30 vsplit") require('oil').open() vim.api.nvim_buf_set_name(0, 'Oil Explorer') end, mode = "n", desc = "Open Oil" },
-      { "<leader>oF", function() require('oil').open_float() end, mode = "n", desc = "Open Oil" },
-      { "<leader>of", function(_)
-        vim.api.nvim_create_autocmd("WinEnter", {
-          callback = function()
-            local bufname = vim.api.nvim_buf_get_name(0)
-            if bufname:match("^oil://") then
-              vim.wo.number = false
-              vim.wo.relativenumber = false
-            end
-          end,
-        })
-        function OpenOilInFloat()
-          -- 固定サイズ
-          local fixed_width = 30
-          local fixed_height = 20
-
-          -- 画面サイズ取得
-          local total_cols = vim.o.columns
-          local total_lines = vim.o.lines
-
-          -- 入り切るか判定
-          local width = fixed_width
-          if total_cols < fixed_width + 4 then
-              width = math.floor(total_cols * 0.4) -- 相対サイズに切り替え
-          end
-
-          local height = fixed_height
-          if total_lines < fixed_height + 4 then
-              height = math.floor(total_lines * 0.6)
-          end
-
-          -- 右上に寄せて、少し下に余白（row: 1〜2）
-          local col = total_cols - width - 2
-          local row = 2
-
-          -- scratch buffer
-          local buf = vim.api.nvim_create_buf(false, true)
-
-          -- フロート作成
-          vim.api.nvim_open_win(buf, true, {
-            relative = "editor",
-            width = width,
-            height = height,
-            row = row,
-            col = col,
-            style = "minimal",
-            border = "rounded",
-          })
-
-          -- oil 起動
-          vim.cmd("Oil")
-
-          -- q で閉じる
-          vim.keymap.set("n", "q", function()
-              vim.api.nvim_win_close(0, true)
-         end, { buffer = true })
-        end
-      end, desc = "floating window"},
-    },
-    after = function(_)
-      require("oil").setup({ win_options = { signcolumn = "yes:2", winblend = 10 } })
-    end,
-  },
-  {
-    "telescope.nvim",
-    dep_of = {
-      "telescope-undo.nvim",
-    },
-    after = function(_)
-      require("telescope").setup({
-        defaults = {
-          layout_config = { prompt_position = "top" },
-          layout_strategy = "vertical",
-          sorting_strategy = "ascending",
-        },
-        extensions = {
-          frecency = {
-            ignore_patterns = { "*.git/*", "*/tmp/*" },
-            show_scores = false,
-            show_unindexed = true,
-          },
-          undo = {
-            layout_config = { preview_height = 0.8, prompt_position = "top" },
-            layout_strategy = "vertical",
-            side_by_side = true,
-            sorting_strategy = "ascending",
-            use_delta = true,
-          },
-        },
-      })
-
-      local __telescopeExtensions = { "undo", "ui-select", "fzf", "frecency" }
-      for i, extension in ipairs(__telescopeExtensions) do
-        require("telescope").load_extension(extension)
-      end
-    end,
-    keys = {
-      { "<leader>l" },
-      { "<leader>fn", "<CMD> Noice telescope <CR>", mode = "", desc = "Notifications", silent = true },
-      { "<leader>ff", "<CMD> Telescope find_files <CR>", mode = "", desc = "Find files", silent = true },
-      { "<leader>fg", "<CMD> Telescope live_grep <CR>", mode = "", desc = "Live grep", silent = true },
-      { "<leader>fb", "<CMD> Telescope buffers <CR>", mode = "", desc = "List buffers", silent = true },
-      { "<leader>fh", function() require('telescope.builtin').help_tags(require('telescope.themes').get_ivy()) end, mode = "", desc = "Help tags", silent = true },
-      { "<leader>fc", "<CMD> Telescope commands <CR>", mode = "", desc = "List commands", silent = true },
-      { "<leader>fk", "<CMD> Telescope keymaps <CR>", mode = "", desc = "List keymaps", silent = true },
-      { "<leader>fi", "<CMD> Telescope builtin <CR>", mode = "", desc = "List built-in pickers", silent = true },
-      { "<leader>fu", function() require('telescope').extensions.undo.undo() end, mode = "", desc = "Undo history", silent = true },
-      { "<leader>fr", "<CMD>Telescope frecency<cr>", mode = "", desc = "Frecency", silent = true },
-      { "<leader>fp", function()
-        local function find_git_root()
-          -- Use the current buffer's path as the starting point for the git search
-          local current_file = vim.api.nvim_buf_get_name(0)
-          local current_dir
-          local cwd = vim.fn.getcwd()
-          -- If the buffer is not associated with a file, return nil
-          if current_file == "" then
-            current_dir = cwd
-          else
-            -- Extract the directory from the current file's path
-            current_dir = vim.fn.fnamemodify(current_file, ":h")
-          end
-
-          -- Find the Git root directory from the current file's path
-          local git_root = vim.fn.systemlist("git -C " .. vim.fn.escape(current_dir, " ") .. " rev-parse --show-toplevel")[1]
-          if vim.v.shell_error ~= 0 then
-            vim.notify("Not a git repository. Searching on current working directory")
-            return cwd
-          end
-          return git_root
-        end
-
-        -- Custom live_grep function to search in git root
-        local function live_grep_git_root()
-          local git_root = find_git_root()
-          if git_root then
-            require('telescope.builtin').live_grep({
-              search_dirs = { git_root },
-            })
-          end
-        end
-
-        live_grep_git_root()
-      end, desc = "Live grep Git root"},
-     },
   },
 }

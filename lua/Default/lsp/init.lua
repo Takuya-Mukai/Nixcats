@@ -69,81 +69,6 @@ require("lze").load{
       },
     },
   },
-  {
-    "nvim-lint",
-    event = { "BufReadPre", "BufNewFile" },
-    after = function(_)
-      require("lint").linters_by_ft = {
-        shell = { "shellcheck" },
-        python = { "ruff" },
-        lua = { "luacheck" },
-        rust = { "clippy" },
-        nix = { "statix", "deadnix" },
-        markdown = { "markdownlint-cli2"},
-        cpp = { "clang-tidy" },
-        sql = { "sqlfluff" },
-        yaml = { "yq" },
-        docker = { "hadolint" },
-      }
-
-      vim.api.nvim_create_autocmd({ "BufWritePost" }, {
-        callback = function()
-
-          -- try_lint without arguments runs the linters defined in `linters_by_ft`
-          -- for the current filetype
-          require("lint").try_lint()
-
-          -- You can call `try_lint` with a linter name or a list of names to always
-          -- run specific linters, independent of the `linters_by_ft` configuration
-          -- require("lint").try_lint("cspell")
-        end,
-      })
-    end,
-  },
-  {
-    "conform.nvim",
-    event = { "BufWritePre" },
-    cmd = { "ConformInfo" },
-    keys = {
-      {
-        -- Customize or remove this keymap to your liking
-        "<leader>lf",
-        function()
-          require("conform").format({ async = true })
-        end,
-        mode = "",
-        desc = "Format buffer",
-      },
-    },
-    after = function(_)
-      require("conform").setup({
-        formatters_by_ft = {
-          python = { "isort", "black" },
-          markdown = { "markdownlint-cli2", },
-          lua = { "stylua", },
-          nix = { "nixfmt", "nixpkgs-fmt", },
-          cpp = { "clang-format", },
-          shell = { "shellcheck" },
-          sql = { "sqlfluff" },
-          typst = { "typstyle" },
-          yaml = { "yq" },
-          json = { "yq" },
-          xml = { "yq" },
-        },
-        format_on_save = {
-          -- These options will be passed to conform.format()
-          timeout_ms = 500,
-          lsp_format = "fallback",
-        },
-      })
-      vim.api.nvim_create_autocmd("BufWritePre", {
-        pattern = "*",
-        callback = function(args)
-          require("conform").format({ bufnr = args.buf })
-        end,
-      })
-    end,
-  }
 }
 do
     vim.lsp.enable("bashls")
@@ -169,20 +94,20 @@ end
 -- Set up autocommands {{
 do
     local __nixvim_autocommands = {
-        {
-            callback = function(event)
-                do
-                    -- client and bufnr are supplied to the builtin `on_attach` callback,
-                    -- so make them available in scope for our global `onAttach` impl
-                    local client = vim.lsp.get_client_by_id(event.data.client_id)
-                    local bufnr = event.buf
-                    require("lsp-format").on_attach(client, bufnr)
-                end
-            end,
-            desc = "Run LSP onAttach",
-            event = "LspAttach",
-            group = "nixvim_lsp_on_attach",
-        },
+        -- {
+        --     callback = function(event)
+        --         do
+        --             -- client and bufnr are supplied to the builtin `on_attach` callback,
+        --             -- so make them available in scope for our global `onAttach` impl
+        --             local client = vim.lsp.get_client_by_id(event.data.client_id)
+        --             local bufnr = event.buf
+        --             require("lsp-format").on_attach(client, bufnr)
+        --         end
+        --     end,
+        --     desc = "Run LSP onAttach",
+        --     event = "LspAttach",
+        --     group = "nixvim_lsp_on_attach",
+        -- },
         {
             callback = function(args)
                 do
@@ -245,60 +170,60 @@ do
                     vim.keymap.set(map.mode, map.key, map.action, options)
                 end
 
-                do
-                    local map = {
-                        action = require("telescope.builtin").lsp_definitions,
-                        key = "<leader>lD",
-                        mode = "",
-                        options = { desc = "Definitions" },
-                    }
-                    local options = vim.tbl_extend("keep", map.options or {}, { buffer = args.buf })
-                    vim.keymap.set(map.mode, map.key, map.action, options)
-                end
-
-                do
-                    local map = {
-                        action = "<CMD> lua require('telescope.builtin').lsp_document_symbols(require('telescope.themes').get_cursor()) <CR>",
-                        key = "<leader>ls",
-                        mode = "",
-                        options = { desc = "Document symbols", silent = true },
-                    }
-                    local options = vim.tbl_extend("keep", map.options or {}, { buffer = args.buf })
-                    vim.keymap.set(map.mode, map.key, map.action, options)
-                end
-
-                do
-                    local map = {
-                        action = "<CMD> lua require('telescope.builtin').lsp_workspace_symbols(require('telescope.themes').get_cursor()) <CR>",
-                        key = "<leader>lw",
-                        mode = "",
-                        options = { desc = "Workspace symbols", silent = true },
-                    }
-                    local options = vim.tbl_extend("keep", map.options or {}, { buffer = args.buf })
-                    vim.keymap.set(map.mode, map.key, map.action, options)
-                end
-
-                do
-                    local map = {
-                        action = "<CMD> lua require('telescope.builtin').lsp_references(require('telescope.themes').get_cursor()) <CR>",
-                        key = "<leader>lr",
-                        mode = "",
-                        options = { desc = "References", silent = true },
-                    }
-                    local options = vim.tbl_extend("keep", map.options or {}, { buffer = args.buf })
-                    vim.keymap.set(map.mode, map.key, map.action, options)
-                end
-
-                do
-                    local map = {
-                        action = function() require('telescope.builtin').diagnostics(require('telescope.themes').get_ivy()) end,
-                        key = "<leader>ld",
-                        mode = "",
-                        options = { desc = "Diagnostics", silent = true },
-                    }
-                    local options = vim.tbl_extend("keep", map.options or {}, { buffer = args.buf })
-                    vim.keymap.set(map.mode, map.key, map.action, options)
-                end
+                -- do
+                --     local map = {
+                --         action = require("telescope.builtin").lsp_definitions,
+                --         key = "<leader>lD",
+                --         mode = "",
+                --         options = { desc = "Definitions" },
+                --     }
+                --     local options = vim.tbl_extend("keep", map.options or {}, { buffer = args.buf })
+                --     vim.keymap.set(map.mode, map.key, map.action, options)
+                -- end
+                --
+                -- do
+                --     local map = {
+                --         action = "<CMD> lua require('telescope.builtin').lsp_document_symbols(require('telescope.themes').get_cursor()) <CR>",
+                --         key = "<leader>ls",
+                --         mode = "",
+                --         options = { desc = "Document symbols", silent = true },
+                --     }
+                --     local options = vim.tbl_extend("keep", map.options or {}, { buffer = args.buf })
+                --     vim.keymap.set(map.mode, map.key, map.action, options)
+                -- end
+                --
+                -- do
+                --     local map = {
+                --         action = "<CMD> lua require('telescope.builtin').lsp_workspace_symbols(require('telescope.themes').get_cursor()) <CR>",
+                --         key = "<leader>lw",
+                --         mode = "",
+                --         options = { desc = "Workspace symbols", silent = true },
+                --     }
+                --     local options = vim.tbl_extend("keep", map.options or {}, { buffer = args.buf })
+                --     vim.keymap.set(map.mode, map.key, map.action, options)
+                -- end
+                --
+                -- do
+                --     local map = {
+                --         action = "<CMD> lua require('telescope.builtin').lsp_references(require('telescope.themes').get_cursor()) <CR>",
+                --         key = "<leader>lr",
+                --         mode = "",
+                --         options = { desc = "References", silent = true },
+                --     }
+                --     local options = vim.tbl_extend("keep", map.options or {}, { buffer = args.buf })
+                --     vim.keymap.set(map.mode, map.key, map.action, options)
+                -- end
+                --
+                -- do
+                --     local map = {
+                --         action = function() require('telescope.builtin').diagnostics(require('telescope.themes').get_ivy()) end,
+                --         key = "<leader>ld",
+                --         mode = "",
+                --         options = { desc = "Diagnostics", silent = true },
+                --     }
+                --     local options = vim.tbl_extend("keep", map.options or {}, { buffer = args.buf })
+                --     vim.keymap.set(map.mode, map.key, map.action, options)
+                -- end
 
                 do
                     local map = {
