@@ -53,6 +53,7 @@
   # see :help nixCats.flake.outputs
   outputs =
     { self, nixpkgs, ... }@inputs:
+
     let
       inherit (inputs.nixCats) utils;
       luaPath = ./.;
@@ -116,6 +117,7 @@
           # this section is for dependencies that should be available
           # at RUN TIME for plugins. Will be available to PATH within neovim terminal
           # this includes LSPs
+
           lspsAndRuntimeDeps = {
             # some categories of stuff.
             general = with pkgs; [
@@ -161,7 +163,7 @@
             cpp = with pkgs; [
               clang-tools
               cppcheck
-              vscode-extensions.ms-vscode.cpptools
+              lldb
             ];
             sh = with pkgs; [
               bash-language-server
@@ -335,24 +337,6 @@
             ];
 
           };
-          # optionalPlugins = {
-          #   neonixdev = with pkgs.vimPlugins; [
-          #     lazydev-nvim
-          #   ];
-          #   general = {
-          #     extra = with pkgs.vimPlugins; [
-          #       fidget-nvim
-          #       # lualine-lsp-progress
-          #       which-key-nvim
-          #       comment-nvim
-          #       undotree
-          #       indent-blankline-nvim
-          #       # If it was included in your flake inputs as plugins-hlargs,
-          #       # this would be how to add that plugin in your config.
-          #       # pkgs.neovimPlugins.hlargs
-          #     ];
-          #   };
-          # };
 
           # shared libraries to be added to LD_LIBRARY_PATH
           # variable available to nvim runtime
