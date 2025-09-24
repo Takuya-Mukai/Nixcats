@@ -265,6 +265,7 @@ require("lze").load({
 	},
 	{
 		"lazydev.nvim",
+		ft = "lua",
 		dep_of = { "nvim-dap-ui" },
 		-- dep_of = { "nvim-dap" },
 		lazy = true,

@@ -481,6 +481,31 @@ require("lze").load({
 				desc = "Toggle Terminal",
 			},
 			{
+				"<leader>tf",
+				function()
+					require("snacks.terminal").open(
+						nil,
+						{
+							win = {
+								style = "float",
+								relative = "editor",
+								border = "rounded",
+								width = 0.6,
+								height = 0.7,
+							},
+						}
+					)
+				end,
+				desc = "Toggle Floating Terminal",
+			},
+			{
+				"<leader>tl",
+				function()
+					Snacks.terminal.list()
+				end,
+				desc = "List Terminal",
+			},
+			{
 				"<c-_>",
 				function()
 					Snacks.terminal()
@@ -564,7 +589,20 @@ require("lze").load({
 		end,
 	},
 	{
-		"vim-startuptime",
+		"diffview.nvim",
+		after = function(_)
+			require("diffview").setup({ use_icons = true })
+		end,
+		keys = {
+			{ "<leader>gd", "<cmd>DiffviewOpen<CR>", mode = "", desc = "Open Diffview", silent = true },
+		},
+		cmd = {
+			"DiffviewOpen",
+			"DiffviewClose",
+			"DiffviewToggleFiles",
+			"DiffviewFocusFiles",
+			"DiffviewRefresh",
+		},
 	},
 	{
 		"which-key.nvim",
@@ -600,11 +638,14 @@ require("lze").load({
 				{ "<leader>sct", desc = "<tag> → <h1>       [cst]" },
 				-- { "<leader>f", group = "Telescope" },
 				-- { "<leader>y", group = "Yazi" },
-				-- { "<leader>t", group = "Terminal" },
-				-- { "<leader>tt", group = "Open Terminal" },
+				{ "<leader>t", group = "Terminal" },
+				-- { "<leader>tt", group = "Open Terminal" }
 				{ "<leader>rg", group = "Navigation" },
 				{ "<leader>rl", group = "List definition" },
 				{ "<leader>x", group = "Trouble" },
+				{ "<leader>b", group = "Delete Buffer" },
+				{ "<leader>d", group = "Debug" },
+				{ "<leader>f", group = "Find" },
 			})
 		end,
 	},

@@ -127,6 +127,7 @@
               ripgrep
               fd
               delta
+              sqlite
             ];
             python = with pkgs; [
               pyright
@@ -138,8 +139,8 @@
             ];
             markdown = with pkgs; [
               marksman
-              ltex-ls
               markdownlint-cli2
+              prettier
             ];
             typescript = with pkgs; [
               typescript-language-server
@@ -150,6 +151,7 @@
               clippy
             ];
             lua = with pkgs; [
+              luajitPackages.luacheck
               luajitPackages.lua-lsp
               stylua
             ];
@@ -159,6 +161,7 @@
               nixfmt
               deadnix
               statix
+              typstyle
             ];
             cpp = with pkgs; [
               clang-tools
@@ -170,7 +173,7 @@
               shfmt
               shellcheck
             ];
-            sqls = with pkgs; [
+            sql = with pkgs; [
               sqls
               sqlfluff
             ];

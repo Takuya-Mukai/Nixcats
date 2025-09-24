@@ -27,6 +27,30 @@ require("lze").load({
 		keys = { "<leader>a", "<cmd>AerialToggle!<cr>", desc = "Toggle Aerial" },
 	},
 	{
+		"nvim-lspconfig",
+		event = "LspAttach",
+		after = function(_)
+			local LspList = {
+				"pyright",
+				"ruff",
+				"marksman",
+				"ts_ls",
+				"rust_analyzer",
+				"lua_ls",
+				"nil_ls",
+				"ltex_ls",
+				"bashls",
+				"clangd",
+				"sqls",
+				"tinymist",
+				"yamlls",
+			}
+			vim.lsp.config("*", {})
+			vim.lsp.config("lua_ls", { cmd = { "lua-lsp" } })
+			vim.lsp.enable(LspList)
+		end,
+	},
+	{
 		"trouble.nvim",
 		after = function()
 			require("trouble").setup({})
@@ -78,38 +102,7 @@ require("lze").load({
 		},
 	},
 })
-do
-	vim.lsp.enable("bashls")
-	vim.lsp.config("bashls")
-	vim.lsp.enable("clangd")
-	vim.lsp.config("clangd")
-	vim.lsp.enable("lua_ls")
-	vim.lsp.config("lua_ls")
-	vim.lsp.enable("nil_ls")
-	vim.lsp.config("nil_ls")
-	vim.lsp.enable("pyright")
-	vim.lsp.config("pyright")
-	vim.lsp.enable("ruff")
-	vim.lsp.config("ruff")
-	vim.lsp.enable("marksman")
-	vim.lsp.config("marksman")
-	vim.lsp.enable("ltex-ls")
-	vim.lsp.config("ltex-ls")
-	vim.lsp.enable("sqls")
-	vim.lsp.config("sqls")
-	vim.lsp.enable("ts_ls")
-	vim.lsp.config("ts_ls")
-	vim.lsp.enable("rust_analyzer")
-	vim.lsp.config("rust_analyzer")
-	vim.lsp.enable("sqls")
-	vim.lsp.config("sqls")
-	vim.lsp.enable("tinymist")
-	vim.lsp.config("tinymist")
-	vim.lsp.enable("tsserver")
-	vim.lsp.config("tsserver")
-	vim.lsp.enable("yamlls")
-	vim.lsp.config("yamlls")
-end
+
 do
 	local __nixvim_autogroups = { nixvim_lsp_binds = { clear = false }, nixvim_lsp_on_attach = { clear = false } }
 
@@ -196,61 +189,6 @@ do
 					local options = vim.tbl_extend("keep", map.options or {}, { buffer = args.buf })
 					vim.keymap.set(map.mode, map.key, map.action, options)
 				end
-
-				-- do
-				--     local map = {
-				--         action = require("telescope.builtin").lsp_definitions,
-				--         key = "<leader>lD",
-				--         mode = "",
-				--         options = { desc = "Definitions" },
-				--     }
-				--     local options = vim.tbl_extend("keep", map.options or {}, { buffer = args.buf })
-				--     vim.keymap.set(map.mode, map.key, map.action, options)
-				-- end
-				--
-				-- do
-				--     local map = {
-				--         action = "<CMD> lua require('telescope.builtin').lsp_document_symbols(require('telescope.themes').get_cursor()) <CR>",
-				--         key = "<leader>ls",
-				--         mode = "",
-				--         options = { desc = "Document symbols", silent = true },
-				--     }
-				--     local options = vim.tbl_extend("keep", map.options or {}, { buffer = args.buf })
-				--     vim.keymap.set(map.mode, map.key, map.action, options)
-				-- end
-				--
-				-- do
-				--     local map = {
-				--         action = "<CMD> lua require('telescope.builtin').lsp_workspace_symbols(require('telescope.themes').get_cursor()) <CR>",
-				--         key = "<leader>lw",
-				--         mode = "",
-				--         options = { desc = "Workspace symbols", silent = true },
-				--     }
-				--     local options = vim.tbl_extend("keep", map.options or {}, { buffer = args.buf })
-				--     vim.keymap.set(map.mode, map.key, map.action, options)
-				-- end
-				--
-				-- do
-				--     local map = {
-				--         action = "<CMD> lua require('telescope.builtin').lsp_references(require('telescope.themes').get_cursor()) <CR>",
-				--         key = "<leader>lr",
-				--         mode = "",
-				--         options = { desc = "References", silent = true },
-				--     }
-				--     local options = vim.tbl_extend("keep", map.options or {}, { buffer = args.buf })
-				--     vim.keymap.set(map.mode, map.key, map.action, options)
-				-- end
-				--
-				-- do
-				--     local map = {
-				--         action = function() require('telescope.builtin').diagnostics(require('telescope.themes').get_ivy()) end,
-				--         key = "<leader>ld",
-				--         mode = "",
-				--         options = { desc = "Diagnostics", silent = true },
-				--     }
-				--     local options = vim.tbl_extend("keep", map.options or {}, { buffer = args.buf })
-				--     vim.keymap.set(map.mode, map.key, map.action, options)
-				-- end
 
 				do
 					local map = {
