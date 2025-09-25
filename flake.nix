@@ -289,7 +289,7 @@
 
             notification = with pkgs.vimPlugins; [
               noice-nvim
-              nvim-notify
+              # nvim-notify
               fidget-nvim
             ];
 
