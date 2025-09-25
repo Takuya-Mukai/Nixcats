@@ -303,8 +303,9 @@
               ];
             };
 
+            aerial = pkgs.vimPlugins.aerial-nvim;
             lsp = with pkgs.vimPlugins; [
-              aerial-nvim
+              # aerial-nvim
               trouble-nvim
               nvim-lspconfig
             ];
@@ -485,6 +486,7 @@
               debug = {
                 default = true;
               };
+              aerial = true;
               lsp = true;
               code-quality = true;
               lang = {
@@ -515,7 +517,24 @@
               };
             };
           };
-        regularCats =
+        androidCats =
+          { pkgs, name, ... }@misc:
+          # オリジナルの nixCats パッケージ定義を呼び出し、
+          # その結果に対して変更をマージする
+          let
+            originalPackage = packageDefinitions.nixCats { inherit pkgs name misc; };
+          in
+          originalPackage
+          // {
+            # カテゴリの属性セットを上書き
+            categories = originalPackage.categories // {
+              aerial = false;
+            };
+            # 必要であれば、エイリアスなども変更可能
+            settings = originalPackage.settings // {
+            };
+          };
+        defaultCats =
           { pkgs, ... }@misc:
           {
             settings = {
