@@ -66,8 +66,9 @@ do
 		whichwrap = "b,s,<,>,[,]",
 		wildmenu = true,
 		wildmode = "list:longest,full",
-		winblend = 0,
+		winblend = 20,
 		wrap = false,
+		winborder = "rounded",
 	}
 
 	for k, v in pairs(nixvim_options) do

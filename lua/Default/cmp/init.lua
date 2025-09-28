@@ -55,15 +55,6 @@ require("lze").load({
 	},
 	{
 		"blink.cmp",
-		-- dep_of = {
-		-- 	"blink-cmp-ripgrep",
-		-- 	"blink-cmp-spell",
-		-- 	"blink-cmp-git",
-		-- 	"blink-cmp-copilot",
-		-- 	"lspkind.nvim",
-		-- 	"luasnip",
-		-- 	"blink-ripgrep.nvim",
-		-- },
 		event = { "InsertEnter", "CmdlineEnter" },
 		after = function()
 			local spell_enabled_cache = {}
@@ -80,10 +71,37 @@ require("lze").load({
 				enabled = function()
 					return not vim.tbl_contains({ "dap-repl" }, vim.bo.filetype)
 				end,
+				keymap = {
+					["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
+					["<C-e>"] = { "hide", "fallback" },
+
+					["<Tab>"] = {
+						function(cmp)
+							if cmp.snippet_active() then
+								return cmp.accept()
+							else
+								return cmp.select_and_accept()
+							end
+						end,
+						"snippet_forward",
+						"fallback",
+					},
+					["<S-Tab>"] = { "snippet_backward", "fallback" },
+
+					["<Up>"] = { "select_prev", "fallback" },
+					["<Down>"] = { "select_next", "fallback" },
+					["<C-p>"] = { "select_prev", "fallback_to_mappings" },
+					["<C-n>"] = { "select_next", "fallback_to_mappings" },
+
+					["<C-b>"] = { "scroll_documentation_up", "fallback" },
+					["<C-f>"] = { "scroll_documentation_down", "fallback" },
+
+					["<C-k>"] = { "show_signature", "hide_signature", "fallback" },
+				},
 				cmdline = {
 					enabled = true,
 					-- use 'inherit' to inherit mappings from top level `keymap` config
-					keymap = { preset = "inherit" },
+					keymap = { preset = "inherit" }, -- Inherits from top level `keymap` config when not set
 					sources = { "buffer", "cmdline" },
 
 					-- OR explicitly configure per cmd type
@@ -99,8 +117,8 @@ require("lze").load({
 					--   if type == ':' or type == '@' then return { 'cmdline', 'buffer' } end
 					--   return {}
 					-- end,
-
 					completion = {
+
 						trigger = {
 							show_on_blocked_trigger_characters = {},
 							show_on_x_blocked_trigger_characters = {},
@@ -110,7 +128,7 @@ require("lze").load({
 								-- When `true`, will automatically select the first item in the completion list
 								preselect = true,
 								-- When `true`, inserts the completion item automatically when selecting it
-								auto_insert = true,
+								auto_insert = false,
 							},
 						},
 						-- Whether to automatically show the window when new completion items are available
@@ -135,45 +153,50 @@ require("lze").load({
 						list = {
 							selection = {
 								-- When `true`, will automatically select the first item in the completion list
-								preselect = nil,
+								preselect = true,
 								-- When `true`, inserts the completion item automatically when selecting it
-								auto_insert = nil,
+								auto_insert = false,
 							},
 						},
 						-- Whether to automatically show the window when new completion items are available
-						menu = { auto_show = nil },
+						menu = { auto_show = true },
 						-- Displays a preview of the selected item on the current line
-						ghost_text = { enabled = nil },
+						ghost_text = { enabled = true },
 					},
 				},
 				appearance = {
 					-- Blink does not expose its default kind icons so you must copy them all (or set your custom ones) and add Copilot
 					kind_icons = {
-						Class = "󱡠",
-						Color = "󰏘",
-						Constant = "󰏿",
-						Constructor = "󰒓",
-						Copilot = "",
-						Enum = "󰦨",
-						EnumMember = "󰦨",
-						Event = "󱐋",
-						Field = "󰜢",
-						File = "󰈔",
-						Folder = "󰉋",
-						Function = "󰊕",
-						Interface = "󱡠",
-						Keyword = "󰻾",
-						Method = "󰊕",
-						Module = "󰅩",
-						Operator = "󰪚",
-						Property = "󰖷",
-						Reference = "󰬲",
-						Snippet = "󱄽",
-						Struct = "󱡠",
-						Text = "󰉿",
-						TypeParameter = "󰬛",
-						Unit = "󰪚",
-						Value = "󰦨",
+						-- Text = "󰉿",
+						-- Method = "󰊕",
+						-- Function = "󰊕",
+						-- Constructor = "󰒓",
+						--
+						-- Field = "󰜢",
+						-- Variable = "󰆦",
+						-- Property = "󰖷",
+						--
+						-- Class = "󱡠",
+						-- Interface = "󱡠",
+						-- Struct = "󱡠",
+						-- Module = "󰅩",
+						--
+						-- Unit = "󰪚",
+						-- Value = "󰦨",
+						-- Enum = "󰦨",
+						-- EnumMember = "󰦨",
+						--
+						-- Keyword = "󰻾",
+						-- Constant = "󰏿",
+						--
+						-- Snippet = "󱄽",
+						-- Color = "󰏘",
+						-- File = "󰈔",
+						-- Reference = "󰬲",
+						-- Folder = "󰉋",
+						-- Event = "󱐋",
+						-- Operator = "󰪚",
+						-- TypeParameter = "󰬛",
 					},
 				},
 
@@ -197,12 +220,12 @@ require("lze").load({
 					-- Remove 'buffer' if you don't want text completions, by default it's only enabled when LSP returns no items
 					default = {
 						"lsp",
-						"path",
 						"snippets",
+						"path",
 						"buffer",
+						"copilot",
 						"ripgrep",
 						"git",
-						"copilot",
 						"spell",
 					},
 					providers = {
@@ -219,6 +242,15 @@ require("lze").load({
 							module = "blink-cmp-copilot",
 							score_offset = 100,
 							async = true,
+							transform_items = function(_, items)
+								local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
+								local kind_idx = #CompletionItemKind + 1
+								CompletionItemKind[kind_idx] = "Copilot"
+								for _, item in ipairs(items) do
+									item.kind = kind_idx
+								end
+								return items
+							end,
 						},
 						git = {
 							name = "Git",
@@ -235,28 +267,61 @@ require("lze").load({
 					},
 				},
 				snippets = { preset = "luasnip" },
-				signature = { window = { border = "rounded" } },
 				completion = {
-					documentation = { window = { border = "rounded" } },
+					ghost_text = { enabled = true },
+					documentation = {
+						auto_show = true,
+					},
+					list = {
+						selection = {
+							-- When `true`, will automatically select the first item in the completion list
+							preselect = true,
+							-- When `true`, inserts the completion item automatically when selecting it
+							auto_insert = false,
+						},
+					},
 					menu = {
-						border = "rounded",
+						max_height = 15,
 						draw = {
 							components = {
 								kind_icon = {
 									text = function(ctx)
 										local icon = ctx.kind_icon
-										if vim.tbl_contains({ "Path" }, ctx.source_name) then
+
+										-- 1. Path の場合は devicons を優先
+										if ctx.source_name == "Path" then
 											local dev_icon, _ = require("nvim-web-devicons").get_icon(ctx.label)
 											if dev_icon then
 												icon = dev_icon
 											end
-										else
-											icon = require("lspkind").symbolic(ctx.kind, {
-												mode = "symbol",
-											})
 										end
 
-										return icon .. ctx.icon_gap
+										-- 2. devicons が無ければ lspkind を使う
+										if icon == ctx.kind_icon then
+											local lsp_icon = require("lspkind").symbolic(ctx.kind, { mode = "symbol" })
+											if lsp_icon and lsp_icon ~= "" then
+												icon = lsp_icon
+											end
+										end
+
+										-- 3. それでもアイコンが決まらなければ自作条件分岐
+										if icon == ctx.kind_icon then
+											if ctx.source_name == "Git" then
+												icon = "󰊢" -- Git 用アイコン
+											elseif ctx.source_name == "Ripgrep" then
+												icon = "" -- Ripgrep 用アイコン
+											elseif ctx.source_name == "Spell" then
+												icon = "󰓆" -- Spell 用アイコン
+											elseif ctx.source_name == "Copilot" then
+												icon = "" -- Copilot 用アイコン
+												-- elseif ctx.source_name == "Functions" then
+												-- 	icon = "󰊕" -- Function 用アイコン
+												-- else
+												-- 	icon = "" -- デフォルトアイコン
+											end
+										end
+
+										return icon .. (ctx.icon_gap or " ")
 									end,
 
 									-- Optionally, use the highlight groups from nvim-web-devicons
@@ -273,6 +338,10 @@ require("lze").load({
 										return hl
 									end,
 								},
+							},
+							columns = {
+								{ "label", "label_description", gap = 1 },
+								{ "kind_icon", "kind", gap = 1 },
 							},
 						},
 					},
