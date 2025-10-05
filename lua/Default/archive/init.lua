@@ -80,15 +80,6 @@ require("lze").load({
 		end,
 	},
 	{
-		"yazi.nvim",
-		keys = {
-			{ "<leader>y-", "<CMD>Yazi<CR>", mode = "n", desc = "Open at the current File" },
-			{ "<leader>yc", "<CMD>Yazi cwd<CR>", mode = "n", desc = "Open at the current working directory" },
-			{ "<leader>yt", "<CMD>Yazi toggle<CR>", mode = "n", desc = "Resume the last session" },
-		},
-		dep_of = "plenary.nvim",
-	},
-	{
 		"lazygit.nvim",
 		dep_of = "plenary.nvim",
 		after = function(_) end,

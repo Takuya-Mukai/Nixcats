@@ -1,5 +1,14 @@
 require("lze").load({
 	{
+		"yazi.nvim",
+		keys = {
+			{ "<leader>y-", "<CMD>Yazi<CR>", mode = "n", desc = "Open at the current File" },
+			{ "<leader>yc", "<CMD>Yazi cwd<CR>", mode = "n", desc = "Open at the current working directory" },
+			{ "<leader>yt", "<CMD>Yazi toggle<CR>", mode = "n", desc = "Resume the last session" },
+		},
+		dep_of = "plenary.nvim",
+	},
+	{
 		"snacks.nvim",
 		priority = 1000,
 		lazy = false,
@@ -635,7 +644,7 @@ require("lze").load({
 				{ "<leader>sc'", desc = "' → \"              [cs'\"]" },
 				{ "<leader>sct", desc = "<tag> → <h1>       [cst]" },
 				-- { "<leader>f", group = "Telescope" },
-				-- { "<leader>y", group = "Yazi" },
+				{ "<leader>y", group = "Yazi" },
 				{ "<leader>t", group = "Terminal" },
 				-- { "<leader>tt", group = "Open Terminal" }
 				{ "<leader>rg", group = "Navigation" },
