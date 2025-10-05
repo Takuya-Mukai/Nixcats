@@ -276,15 +276,16 @@
               which-key-nvim
               toggleterm-nvim
               diffview-nvim
+              snacks-nvim
+              yazi-nvim
               # oil-nvim
               # oil-git-status-nvim
-              snacks-nvim
-              undotree
+              # undotree
               # telescope本体と高速化のための拡張
-              telescope-nvim
-              telescope-fzf-native-nvim
-              telescope-ui-select-nvim
-              telescope-undo-nvim
+              # telescope-nvim
+              # telescope-fzf-native-nvim
+              # telescope-ui-select-nvim
+              # telescope-undo-nvim
             ];
 
             notification = with pkgs.vimPlugins; [
@@ -305,7 +306,6 @@
 
             aerial = pkgs.vimPlugins.aerial-nvim;
             lsp = with pkgs.vimPlugins; [
-              # aerial-nvim
               trouble-nvim
               nvim-lspconfig
             ];
