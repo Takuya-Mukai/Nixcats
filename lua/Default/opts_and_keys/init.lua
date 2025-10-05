@@ -144,15 +144,23 @@ vim.keymap.set("n", "<leader>pw", function()
 	-- 現在のバッファを保存
 	vim.cmd("write")
 
-	-- 現在のファイルパス
 	local filepath = vim.fn.expand("%:p")
+	local ext = vim.fn.fnamemodify(filepath, ":e")
+
+	if ext ~= "py" then
+		vim.notify("Only Python files can be converted to ipynb!", vim.log.levels.WARN)
+		return
+	end
 
 	if vim.fn.filereadable(filepath) == 1 then
-		-- .py → .ipynb 変換
 		vim.fn.jobstart({ "jupytext", "--to", "notebook", filepath }, {
 			detach = true,
-			on_exit = function()
-				vim.notify("Converted to ipynb!", vim.log.levels.INFO)
+			on_exit = function(_, exit_code)
+				if exit_code == 0 then
+					vim.notify("Converted to ipynb successfully!", vim.log.levels.INFO)
+				else
+					vim.notify("Failed to convert to ipynb!", vim.log.levels.ERROR)
+				end
 			end,
 		})
 	else
