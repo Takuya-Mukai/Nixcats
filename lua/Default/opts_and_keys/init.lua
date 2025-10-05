@@ -128,3 +128,8 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 -- jk で ESC
 vim.keymap.set("i", "jk", "<Esc>", { noremap = true })
+
+-- add python code cell
+keymap("n", "<leader>pc", "o# %%<CR>", { noremap = true, silent = true })
+-- add markdown cell
+keymap("n", "<leader>pm", "o# %% [markdown]<CR># ", { noremap = true, silent = true })
