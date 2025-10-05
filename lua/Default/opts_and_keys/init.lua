@@ -129,7 +129,33 @@ vim.api.nvim_create_autocmd("FileType", {
 -- jk で ESC
 vim.keymap.set("i", "jk", "<Esc>", { noremap = true })
 
--- add python code cell
-keymap("n", "<leader>pc", "o# %%<CR>", { noremap = true, silent = true })
--- add markdown cell
-keymap("n", "<leader>pm", "o# %% [markdown]<CR># ", { noremap = true, silent = true })
+-- コードセル挿入
+vim.keymap.set("n", "<leader>pc", "o# %%<CR>", { noremap = true, silent = true, desc = "Insert code cell (# %%)" })
+
+-- マークダウンセル挿入
+vim.keymap.set(
+	"n",
+	"<leader>pm",
+	"o# %% [markdown]<CR># ",
+	{ noremap = true, silent = true, desc = "Insert markdown cell (# %% [markdown])" }
+)
+
+vim.keymap.set("n", "<leader>pw", function()
+	-- 現在のバッファを保存
+	vim.cmd("write")
+
+	-- 現在のファイルパス
+	local filepath = vim.fn.expand("%:p")
+
+	if vim.fn.filereadable(filepath) == 1 then
+		-- .py → .ipynb 変換
+		vim.fn.jobstart({ "jupytext", "--to", "notebook", filepath }, {
+			detach = true,
+			on_exit = function()
+				vim.notify("Converted to ipynb!", vim.log.levels.INFO)
+			end,
+		})
+	else
+		vim.notify("File does not exist!", vim.log.levels.WARN)
+	end
+end, { desc = "Convert Python file to ipynb via Jupytext", noremap = true, silent = true })
