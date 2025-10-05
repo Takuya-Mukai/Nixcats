@@ -483,18 +483,15 @@ require("lze").load({
 			{
 				"<leader>tf",
 				function()
-					require("snacks.terminal").open(
-						nil,
-						{
-							win = {
-								style = "float",
-								relative = "editor",
-								border = "rounded",
-								width = 0.6,
-								height = 0.7,
-							},
-						}
-					)
+					require("snacks.terminal").open(nil, {
+						win = {
+							style = "float",
+							relative = "editor",
+							border = "rounded",
+							width = 0.6,
+							height = 0.7,
+						},
+					})
 				end,
 				desc = "Toggle Floating Terminal",
 			},
@@ -620,6 +617,7 @@ require("lze").load({
 				{ "<leader>g", group = "Git" },
 				{ "<leader>h", group = "Gitsigns" },
 				{ "<leader>l", group = "LSP" },
+				{ "<leader>p", group = "Jupyter" },
 				-- { "g", group = "Move" },
 				-- { "<leader>o", group = "Oil" },
 				{ "<leader>s", group = "Surround" },
