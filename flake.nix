@@ -328,6 +328,13 @@
               ];
             };
 
+            jupyter = with pkgs.vimPlugins; [
+              NotebookNavigator-nvim
+              hydra-nvim
+              iron-nvim
+              mini-ai
+            ];
+
             cmp = with pkgs.vimPlugins; [
               friendly-snippets
               luasnip
@@ -481,6 +488,7 @@
 
               ui = true;
               edit = true;
+              jupyter = true;
               tool = true;
               notification = true;
               debug = {
