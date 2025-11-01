@@ -20,6 +20,10 @@ require("catppuccin").setup({
 		lsp_trouble = true,
 		which_key = true,
 		nvim_surround = true,
+		navic = {
+			enabled = false,
+			custom_bg = "NONE", -- "lualine" will set background to mantle
+		},
 		snacks = {
 			enabled = true,
 			indent_scope_color = "lavender",
@@ -30,6 +34,14 @@ require("catppuccin").setup({
 vim.cmd.colorscheme(colorschemeName)
 
 require("lze").load({
+	{
+		"nui.nvim",
+		dep_of = {
+			"noice.nvim",
+			"fidget.nvim",
+			"nvim-navbuddy",
+		},
+	},
 	{
 		"noice.nvim",
 		after = function()
@@ -50,11 +62,7 @@ require("lze").load({
 				},
 			})
 		end,
-		event = { "UIEnter" },
-		dep_of = {
-			-- "nvim-notify",
-			"nui.nvim",
-		},
+		event = { "DeferredUIEnter" },
 	},
 	{
 		"fidget.nvim",
@@ -401,7 +409,6 @@ require("lze").load({
 	{
 		"lualine.nvim",
 		event = "DeferredUIEnter",
-		dep_of = "gitsigns.nvim",
 		after = function(_)
 			local function diff_source()
 				local gitsigns = vim.b.gitsigns_status_dict
@@ -422,8 +429,7 @@ require("lze").load({
 					globalstatus = true,
 				},
 				sections = {
-					lualine_a = { "mode" },
-					lualine_b = {
+					lualine_a = {
 						{
 							"filename",
 							newfile_status = true,
@@ -436,7 +442,7 @@ require("lze").load({
 							},
 						},
 					},
-					lualine_c = {
+					lualine_b = {
 						{
 							function()
 								local clients = vim.lsp.get_clients()
@@ -470,6 +476,8 @@ require("lze").load({
 								return { fg = "#7f849c" } -- LSPなし（またはcopilot/null-lsだけ）：グレー
 							end,
 						},
+					},
+					lualine_c = {
 						{
 							"diagnostics",
 							sources = { "nvim_diagnostic", "nvim_lsp" },
@@ -482,7 +490,14 @@ require("lze").load({
 							},
 						},
 						{
-							"navic",
+							function()
+								local ok, navic = pcall(require, "nvim-navic")
+								if ok and navic.is_available() then
+									return navic.get_location()
+								end
+								return ""
+							end,
+							color_correction = "dynamic",
 						},
 					},
 					lualine_x = {

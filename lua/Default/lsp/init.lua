@@ -20,12 +20,55 @@ require("lze").load({
 			})
 			-- You probably also want to set a keymap to toggle aerial
 			vim.keymap.set("n", "<leader>a", "<cmd>AerialToggle!<CR>")
-
-			require("which-key").add({
-				{ "<leader>a", group = "aerial" },
-			})
 		end,
 		keys = { "<leader>a", "<cmd>AerialToggle!<cr>", desc = "Toggle Aerial" },
+	},
+	{
+		"nvim-navic",
+		event = "LspAttach",
+		after = function()
+			require("nvim-navic").setup({
+				icons = {
+					File = "󰈙 ",
+					Module = " ",
+					Namespace = "󰌗 ",
+					Package = " ",
+					Class = "󰌗 ",
+					Method = "󰆧 ",
+					Property = " ",
+					Field = " ",
+					Constructor = " ",
+					Enum = "󰕘",
+					Interface = "󰕘",
+					Function = "󰊕 ",
+					Variable = "󰆧 ",
+					Constant = "󰏿 ",
+					String = "󰀬 ",
+					Number = "󰎠 ",
+					Boolean = "◩ ",
+					Array = "󰅪 ",
+					Object = "󰅩 ",
+					Key = "󰌋 ",
+					Null = "󰟢 ",
+					EnumMember = " ",
+					Struct = "󰌗 ",
+					Event = " ",
+					Operator = "󰆕 ",
+					TypeParameter = "󰊄 ",
+				},
+				lsp = {
+					auto_attach = true,
+					preference = nil,
+				},
+				highlight = true,
+				separator = " > ",
+				depth_limit = 0,
+				depth_limit_indicator = "..",
+				safe_output = true,
+				lazy_update_context = false,
+				click = true,
+			})
+		end,
 	},
 	{
 		"nvim-lspconfig",
@@ -50,6 +93,12 @@ require("lze").load({
 			vim.lsp.config("lua_ls", { cmd = { "lua-lsp" } })
 			vim.lsp.enable(LspList)
 		end,
+		dep_of = {
+			"nvim-navic",
+			"nvim-navbuddy",
+			"trouble.nvim",
+			"aerial.nvim",
+		},
 	},
 	{
 		"trouble.nvim",

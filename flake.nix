@@ -310,6 +310,8 @@
 
             aerial = pkgs.vimPlugins.aerial-nvim;
             lsp = with pkgs.vimPlugins; [
+              nvim-navic
+              nvim-navbuddy
               trouble-nvim
               nvim-lspconfig
             ];

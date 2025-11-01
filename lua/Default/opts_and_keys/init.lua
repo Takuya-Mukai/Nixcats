@@ -14,6 +14,8 @@ do
 		helplang = "ja,en",
 		loaded_netrw = 1,
 		loaded_netrwPlugin = 1,
+    loaded_netrwSettings = 1
+    loaded_netrwFileHandlers = 1
 		maplocalleader = " ",
 		scrollview_always_show = true,
 		scrollview_current_only = true,
@@ -51,7 +53,7 @@ do
 		number = true,
 		pumblend = 20,
 		relativenumber = true,
-		scrolloff = 13,
+		scrolloff = 10,
 		shiftwidth = 2,
 		showmatch = true,
 		showmode = false,
