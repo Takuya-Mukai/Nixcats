@@ -250,11 +250,6 @@ do
 			event = "LspAttach",
 			group = "nixvim_lsp_binds",
 		},
-		{
-			command = 'lua if vim.fn.isdirectory(vim.fn.argv(0)) == 1 then require("oil").open() end\n',
-			event = "VimEnter",
-			pattern = "*",
-		},
 	}
 
 	for _, autocmd in ipairs(__nixvim_autocommands) do

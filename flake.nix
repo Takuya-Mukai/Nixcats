@@ -24,6 +24,10 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixCats.url = "github:BirdeeHub/nixCats-nvim";
+    jupytext-nvim = {
+      url = "github:GCBallesteros/jupytext.nvim";
+      flake = false;
+    };
 
     # see :help nixCats.flake.inputs
     # If you want your plugin to be loaded by the standard overlay,
@@ -328,12 +332,22 @@
               ];
             };
 
-            jupyter = with pkgs.vimPlugins; [
-              NotebookNavigator-nvim
-              hydra-nvim
-              iron-nvim
-              mini-ai
-            ];
+            jupyter =
+              with pkgs.vimPlugins;
+              [
+                NotebookNavigator-nvim
+                hydra-nvim
+                iron-nvim
+                mini-ai
+              ]
+              ++ [
+                (pkgs.vimUtils.buildVimPlugin {
+                  pname = "jupytext-nvim";
+                  version = "git";
+                  src = inputs.jupytext-nvim;
+                })
+                pkgs.python3Packages.jupytext
+              ];
 
             cmp = with pkgs.vimPlugins; [
               friendly-snippets

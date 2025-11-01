@@ -130,40 +130,12 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.keymap.set("i", "jk", "<Esc>", { noremap = true })
 
 -- コードセル挿入
-vim.keymap.set("n", "<leader>pc", "o# %%<CR>", { noremap = true, silent = true, desc = "Insert code cell (# %%)" })
+vim.keymap.set("n", "<leader>jc", "o<CR># %%<CR>", { noremap = true, silent = true, desc = "Insert code cell (# %%)" })
 
 -- マークダウンセル挿入
 vim.keymap.set(
 	"n",
-	"<leader>pm",
-	"o# %% [markdown]<CR># ",
+	"<leader>jm",
+	"o<CR># %% [markdown]<CR># ",
 	{ noremap = true, silent = true, desc = "Insert markdown cell (# %% [markdown])" }
 )
-
-vim.keymap.set("n", "<leader>pw", function()
-	-- 現在のバッファを保存
-	vim.cmd("write")
-
-	local filepath = vim.fn.expand("%:p")
-	local ext = vim.fn.fnamemodify(filepath, ":e")
-
-	if ext ~= "py" then
-		vim.notify("Only Python files can be converted to ipynb!", vim.log.levels.WARN)
-		return
-	end
-
-	if vim.fn.filereadable(filepath) == 1 then
-		vim.fn.jobstart({ "jupytext", "--to", "notebook", filepath }, {
-			detach = true,
-			on_exit = function(_, exit_code)
-				if exit_code == 0 then
-					vim.notify("Converted to ipynb successfully!", vim.log.levels.INFO)
-				else
-					vim.notify("Failed to convert to ipynb!", vim.log.levels.ERROR)
-				end
-			end,
-		})
-	else
-		vim.notify("File does not exist!", vim.log.levels.WARN)
-	end
-end, { desc = "Convert Python file to ipynb via Jupytext", noremap = true, silent = true })
