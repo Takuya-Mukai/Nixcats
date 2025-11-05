@@ -131,9 +131,6 @@ vim.api.nvim_create_autocmd("FileType", {
 -- jk で ESC
 vim.keymap.set("i", "jk", "<Esc>", { noremap = true })
 
--- コードセル挿入
-vim.keymap.set("n", "<leader>jc", "o<CR># %%<CR>", { noremap = true, silent = true, desc = "Insert code cell (# %%)" })
-
 -- マークダウンセル挿入
 vim.keymap.set(
 	"n",

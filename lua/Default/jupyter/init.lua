@@ -27,7 +27,7 @@ require("lze").load({
 		after = function()
 			require("iron.core").setup({
 				config = {
-					repl_open_cmd = view.rightbelow("%35"),
+					repl_open_cmd = require("iron.view").split.vertical.rightbelow("%30"),
 				},
 			})
 		end,
@@ -65,6 +65,7 @@ require("lze").load({
 			{ "<leader>jd", "<cmd>lua require('notebook-navigator').delete_cell()<cr>", desc = "Delete Cell" },
 			{ "<leader>js", "<cmd>lua require('notebook-navigator').save_notebook()<cr>", desc = "Save Notebook" },
 			{ "<leader>jl", "<cmd>lua require('notebook-navigator').list_cells()<cr>", desc = "List Cells" },
+			{ "<leader>H" },
 		},
 		after = function()
 			require("notebook-navigator").setup({
