@@ -134,6 +134,7 @@
               sqlite
             ];
             python = with pkgs; [
+              python3Packages.jupytext
               pyright
               ruff
               black
@@ -348,7 +349,6 @@
                   version = "git";
                   src = inputs.jupytext-nvim;
                 })
-                pkgs.python3Packages.jupytext
               ];
 
             cmp = with pkgs.vimPlugins; [
