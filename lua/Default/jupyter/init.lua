@@ -25,7 +25,11 @@ require("lze").load({
 		"iron.nvim",
 		dep_of = { "NotebookNavigator.nvim" },
 		after = function()
-			require("iron.core").setup({})
+			require("iron.core").setup({
+				config = {
+					repl_open_cmd = view.rightbelow("%35"),
+				},
+			})
 		end,
 		lazy = true,
 	},
