@@ -417,7 +417,6 @@
               ps: with ps; [
                 nbformat
                 jupyter-client
-                ipykernel
                 pyperclip
               ]
             );
