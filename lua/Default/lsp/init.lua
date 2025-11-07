@@ -90,7 +90,15 @@ require("lze").load({
 				"yamlls",
 			}
 			vim.lsp.config("*", {})
-			vim.lsp.config("lua_ls", { cmd = { "lua-lsp" } })
+			vim.lsp.config(
+				"lua_ls",
+				{ cmd = { "lua-lsp" }, settings = { Lua = { diagnostics = { globals = { "vim" } } } } }
+			)
+			vim.lsp.config("pyright", {
+				settings = {
+					python = { analysis = { diagnosticServerityOverrides = { reportUnusedExpression = "none" } } },
+				},
+			})
 			vim.lsp.enable(LspList)
 		end,
 		dep_of = {
@@ -98,6 +106,7 @@ require("lze").load({
 			"nvim-navbuddy",
 			"trouble.nvim",
 			"aerial.nvim",
+			"quarto-nvim",
 		},
 	},
 	{

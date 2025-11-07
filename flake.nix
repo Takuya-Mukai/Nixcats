@@ -125,8 +125,8 @@
           lspsAndRuntimeDeps = {
             # some categories of stuff.
             general = with pkgs; [
-              python313Packages.pynvim
-              python313Packages.debugpy
+              python3Packages.pynvim
+              python3Packages.debugpy
               universal-ctags
               ripgrep
               fd
@@ -135,6 +135,9 @@
             ];
             python = with pkgs; [
               python3Packages.jupytext
+              python3Packages.cairosvg
+              python3Packages.pnglatex
+
               pyright
               ruff
               black
@@ -338,10 +341,11 @@
             jupyter =
               with pkgs.vimPlugins;
               [
-                NotebookNavigator-nvim
+                image-nvim
+                molten-nvim
+                quarto-nvim
+                otter-nvim
                 hydra-nvim
-                iron-nvim
-                mini-ai
               ]
               ++ [
                 (pkgs.vimUtils.buildVimPlugin {
@@ -409,6 +413,14 @@
           # vim.g.python3_host_prog
           # or run from nvim terminal via :!<packagename>-python3
           python3.libraries = {
+            general = (
+              ps: with ps; [
+                nbformat
+                jupyter-client
+                ipykernel
+                pyperclip
+              ]
+            );
             test = (_: [ ]);
           };
           # populates $LUA_PATH and $LUA_CPATH

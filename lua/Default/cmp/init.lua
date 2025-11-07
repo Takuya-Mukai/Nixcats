@@ -56,6 +56,9 @@ require("lze").load({
 	{
 		"blink.cmp",
 		event = { "InsertEnter", "CmdlineEnter" },
+		dep_of = {
+			"quarato-nvim",
+		},
 		after = function()
 			local spell_enabled_cache = {}
 
