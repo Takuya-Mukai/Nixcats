@@ -92,12 +92,12 @@ require("lze").load({
 			})
 		end,
 		keys = {
-			{ "<leader>me", "<cmd>MoltenEvaluateOperator<cr>", { desc = "Evaluate operator" } },
-			{ "<leader>mo", "<cmd>MoltenEnterOutput<cr>", { desc = "Open output window" } },
-			{ "<leader>mv", "<cmd><C-u>MoltenEvaluateVisual<cr>gv", { desc = "Execute visual selection" } },
-			{ "<leader>mh", "<cmd>MoltenHideOutput<cr>", { desc = "Close output window" } },
-			{ "<leader>md", "<cmd>MoltenDelete<cr>", { desc = "Delete molten cell" } },
-			{ "<leader>mx", "<cmd>MoltenOpenInBrowser<cr>", { desc = "Open in browser" } },
+			{ "<leader>me", ":MoltenEvaluateOperator<cr>", { desc = "Evaluate operator" } },
+			{ "<leader>mo", ":MoltenEnterOutput<cr>", { desc = "Open output window" } },
+			{ "<leader>mv", ":<C-u>MoltenEvaluateVisual<cr>gv", { desc = "Execute visual selection" } },
+			{ "<leader>mh", ":MoltenHideOutput<cr>", { desc = "Close output window" } },
+			{ "<leader>md", ":MoltenDelete<cr>", { desc = "Delete molten cell" } },
+			{ "<leader>mx", ":MoltenOpenInBrowser<cr>", { desc = "Open in browser" } },
 		},
 		ft = { "quarto", "markdown", "ipynb" },
 	},
