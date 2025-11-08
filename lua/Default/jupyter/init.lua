@@ -10,6 +10,8 @@ require("lze").load({
 			-- automatically import output chunks from a jupyter notebook
 			-- tries to find a kernel that matches the kernel in the jupyter notebook
 			-- falls back to a kernel that matches the name of the active venv (if any)
+		end,
+		after = function()
 			local imb = function(e) -- init molten buffer
 				vim.schedule(function()
 					local kernels = vim.fn.MoltenAvailableKernels()
