@@ -5,7 +5,7 @@ require("lze").load({
 			vim.g.molten_image_provider = "image.nvim"
 			vim.g.molten_output_win_max_height = 20
 			vim.g.molten_wrap_output = true
-			vim.g.molten_virt_text_output = true
+			vim.g.molten_virt_text_output = false
 			vim.g.molten_virt_lines_off_by_1 = true
 			-- automatically import output chunks from a jupyter notebook
 			-- tries to find a kernel that matches the kernel in the jupyter notebook
