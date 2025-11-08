@@ -131,7 +131,7 @@ require("lze").load({
 					enabled = true,
 					-- NOTE: put whatever languages you want here:
 					languages = { "r", "python", "rust" },
-					chunks = "all",
+					chunks = "curly",
 					diagnostics = {
 						enabled = false,
 						triggers = { "BufWritePost" },
@@ -153,12 +153,12 @@ require("lze").load({
 					default_method = "molten",
 				},
 			})
-			-- vim.api.nvim_create_autocmd("FileType", {
-			-- 	pattern = { "markdown" },
-			-- 	callback = function()
-			-- 		vim.cmd("QuartoActivate")
-			-- 	end,
-			-- })
+			vim.api.nvim_create_autocmd("FileType", {
+				pattern = { "markdown" },
+				callback = function()
+					vim.cmd("QuartoActivate")
+				end,
+			})
 			local runner = require("quarto.runner")
 			vim.keymap.set("n", "<localleader>rc", runner.run_cell, { desc = "run cell", silent = true })
 			vim.keymap.set("n", "<localleader>ra", runner.run_above, { desc = "run cell and above", silent = true })
