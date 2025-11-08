@@ -95,45 +95,6 @@ require("lze").load({
 					end
 				end,
 			})
-			vim.keymap.set(
-				"n",
-				"<localleader>me",
-				":MoltenEvaluateOperator<CR>",
-				{ desc = "evaluate operator", silent = true }
-			)
-			vim.keymap.set(
-				"n",
-				"<localleader>mo",
-				":noautocmd MoltenEnterOutput<CR>",
-				{ desc = "open output window", silent = true }
-			)
-			vim.keymap.set(
-				"n",
-				"<localleader>mc",
-				":MoltenReevaluateCell<CR>",
-				{ desc = "re-eval cell", silent = true }
-			)
-			vim.keymap.set(
-				"v",
-				"<localleader>mv",
-				":<C-u>MoltenEvaluateVisual<CR>gv",
-				{ desc = "execute visual selection", silent = true }
-			)
-			vim.keymap.set(
-				"n",
-				"<localleader>mh",
-				":MoltenHideOutput<CR>",
-				{ desc = "close output window", silent = true }
-			)
-			vim.keymap.set("n", "<localleader>md", ":MoltenDelete<CR>", { desc = "delete Molten cell", silent = true })
-
-			-- if you work with html outputs:
-			vim.keymap.set(
-				"n",
-				"<localleader>mx",
-				":MoltenOpenInBrowser<CR>",
-				{ desc = "open output in browser", silent = true }
-			)
 		end,
 		ft = { "quarto", "markdown", "ipynb" },
 	},
@@ -278,7 +239,7 @@ require("lze").load({
 			hydra({
 				name = "JupyterNavigator",
 				hint = [[
-_j_/_k_: move down/up  _r_: run cell    _l_: run line  _R_: run above
+_J_/_K_: move down/up  _r_: run cell    _l_: run line  _R_: run above
     _o_: pen output    _v_: run visual  _h_: hide output
     _d_: delete cell   _x_: open in browser   _<esc>_/_q_: exit ]],
 				config = {
@@ -293,8 +254,8 @@ _j_/_k_: move down/up  _r_: run cell    _l_: run line  _R_: run above
 				mode = { "n" },
 				body = "<localleader>M", -- this is the key that triggers the hydra
 				heads = {
-					{ "j", ":lua go_to_next_code_block_start()<CR>" },
-					{ "k", ":lua go_to_prev_code_block_start()<CR>" },
+					{ "J", ":lua go_to_next_code_block_start()<CR>" },
+					{ "K", ":lua go_to_prev_code_block_start()<CR>" },
 					{ "r", ":QuartoSend<CR>" },
 					{ "l", ":QuartoSendLine<CR>" },
 					{ "R", ":QuartoSendAbove<CR>" },
@@ -366,3 +327,22 @@ end, {
 	nargs = 1,
 	complete = "file",
 })
+vim.keymap.set("n", "<localleader>me", ":MoltenEvaluateOperator<CR>", { desc = "evaluate operator", silent = true })
+vim.keymap.set(
+	"n",
+	"<localleader>mo",
+	":noautocmd MoltenEnterOutput<CR>",
+	{ desc = "open output window", silent = true }
+)
+vim.keymap.set("n", "<localleader>mc", ":MoltenReevaluateCell<CR>", { desc = "re-eval cell", silent = true })
+vim.keymap.set(
+	"v",
+	"<localleader>mv",
+	":<C-u>MoltenEvaluateVisual<CR>gv",
+	{ desc = "execute visual selection", silent = true }
+)
+vim.keymap.set("n", "<localleader>mh", ":MoltenHideOutput<CR>", { desc = "close output window", silent = true })
+vim.keymap.set("n", "<localleader>md", ":MoltenDelete<CR>", { desc = "delete Molten cell", silent = true })
+
+-- if you work with html outputs:
+vim.keymap.set("n", "<localleader>mx", ":MoltenOpenInBrowser<CR>", { desc = "open output in browser", silent = true })
