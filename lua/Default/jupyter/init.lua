@@ -15,23 +15,24 @@ require("lze").load({
 			local imb = function(e) -- init molten buffer
 				vim.schedule(function()
 					local kernels = vim.fn.MoltenAvailableKernels()
-					local try_kernel_name = function()
-						local metadata = vim.json.decode(io.open(e.file, "r"):read("a"))["metadata"]
-						return metadata.kernelspec.name
-					end
-					local ok, kernel_name = pcall(try_kernel_name)
-					if not ok or not vim.tbl_contains(kernels, kernel_name) then
-						kernel_name = nil
-						local venv = os.getenv("VIRTUAL_ENV") or os.getenv("CONDA_PREFIX")
-						if venv ~= nil then
-							kernel_name = string.match(venv, "/.+/(.+)")
-						end
+					-- local try_kernel_name = function()
+					-- 	local metadata = vim.json.decode(io.open(e.file, "r"):read("a"))["metadata"]
+					-- 	return metadata.kernelspec.name
+					-- end
+					-- local ok, kernel_name = pcall(try_kernel_name)
+					-- if not ok or not vim.tbl_contains(kernels, kernel_name) then
+					-- 	kernel_name = nil
+					-- 	local venv = os.getenv("VIRTUAL_ENV") or os.getenv("CONDA_PREFIX")
+					-- 	if venv ~= nil then
+					-- 		kernel_name = string.match(venv, "/.+/(.+)")
+					-- 	end
+					-- end
+					local kernel_name = nil
+					if kernel_name == nil then
+						kernel_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":t"):lower()
 					end
 					if kernel_name ~= nil and vim.tbl_contains(kernels, kernel_name) then
 						vim.cmd(("MoltenInit %s"):format(kernel_name))
-					end
-					if kernel_name == nil then
-						kernel_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":t")
 					end
 					vim.cmd("MoltenImportOutput")
 				end)
@@ -127,7 +128,7 @@ require("lze").load({
 		after = function()
 			require("quarto").setup({
 				lspFeatures = {
-					enabled = true,
+					enabled = false,
 					-- NOTE: put whatever languages you want here:
 					languages = { "r", "python", "rust" },
 					chunks = "all",
