@@ -30,6 +30,9 @@ require("lze").load({
 					if kernel_name ~= nil and vim.tbl_contains(kernels, kernel_name) then
 						vim.cmd(("MoltenInit %s"):format(kernel_name))
 					end
+					if kernel_name == nil then
+						kernel_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":t")
+					end
 					vim.cmd("MoltenImportOutput")
 				end)
 			end
