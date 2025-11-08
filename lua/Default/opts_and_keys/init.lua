@@ -83,6 +83,12 @@ vim.diagnostic.config({
 	virtual_text = false, -- 行末のメッセージを無効化
 	signs = true, -- サインカラムにアイコンを表示
 	underline = true, -- エラーがあるコードに下線を表示
+	severity_sort = true, -- 深刻度でソート
+	update_in_insert = false,
+})
+
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+	-- ここでもタイプ中の更新を無効にする
 	update_in_insert = false,
 })
 
