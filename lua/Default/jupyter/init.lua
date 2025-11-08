@@ -131,7 +131,7 @@ require("lze").load({
 					enabled = true,
 					-- NOTE: put whatever languages you want here:
 					languages = { "r", "python", "rust" },
-					chunks = "curly",
+					chunks = "none",
 					diagnostics = {
 						enabled = false,
 						triggers = { "BufWritePost" },
