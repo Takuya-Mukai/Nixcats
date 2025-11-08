@@ -90,15 +90,46 @@ require("lze").load({
 					end
 				end,
 			})
+			vim.keymap.set(
+				"n",
+				"<localleader>me",
+				":MoltenEvaluateOperator<CR>",
+				{ desc = "evaluate operator", silent = true }
+			)
+			vim.keymap.set(
+				"n",
+				"<localleader>mo",
+				":noautocmd MoltenEnterOutput<CR>",
+				{ desc = "open output window", silent = true }
+			)
+			vim.keymap.set(
+				"n",
+				"<localleader>mc",
+				":MoltenReevaluateCell<CR>",
+				{ desc = "re-eval cell", silent = true }
+			)
+			vim.keymap.set(
+				"v",
+				"<localleader>mv",
+				":<C-u>MoltenEvaluateVisual<CR>gv",
+				{ desc = "execute visual selection", silent = true }
+			)
+			vim.keymap.set(
+				"n",
+				"<localleader>mh",
+				":MoltenHideOutput<CR>",
+				{ desc = "close output window", silent = true }
+			)
+			vim.keymap.set("n", "<localleader>md", ":MoltenDelete<CR>", { desc = "delete Molten cell", silent = true })
+
+			-- if you work with html outputs:
+			vim.keymap.set(
+				"n",
+				"<localleader>mx",
+				":MoltenOpenInBrowser<CR>",
+				{ desc = "open output in browser", silent = true }
+			)
 		end,
-		keys = {
-			{ "<leader>me", ":MoltenEvaluateOperator<cr>", { desc = "Evaluate operator" } },
-			{ "<leader>mo", ":MoltenEnterOutput<cr>", { desc = "Open output window" } },
-			{ "<leader>mv", ":<C-u>MoltenEvaluateVisual<cr>gv", { desc = "Execute visual selection" } },
-			{ "<leader>mh", ":MoltenHideOutput<cr>", { desc = "Close output window" } },
-			{ "<leader>md", ":MoltenDelete<cr>", { desc = "Delete molten cell" } },
-			{ "<leader>mx", ":MoltenOpenInBrowser<cr>", { desc = "Open in browser" } },
-		},
 		ft = { "quarto", "markdown", "ipynb" },
 	},
 	{
@@ -125,11 +156,12 @@ require("lze").load({
 	},
 	{
 		"quarto-nvim",
-		ft = { "quarto", "markdown" },
+		lazy = false,
 		dep_of = { "molten-nvim" },
 		after = function()
 			require("quarto").setup({
 				lspFeatures = {
+					enabled = true,
 					-- NOTE: put whatever languages you want here:
 					languages = { "r", "python", "rust" },
 					chunks = "all",
@@ -153,6 +185,12 @@ require("lze").load({
 					enabled = true,
 					default_method = "molten",
 				},
+			})
+			vim.api.nvim_create_autocmd("FileType", {
+				pattern = { "markdown" },
+				callback = function()
+					vim.cmd("QuartoActivate")
+				end,
 			})
 			local runner = require("quarto.runner")
 			vim.keymap.set("n", "<localleader>rc", runner.run_cell, { desc = "run cell", silent = true })
@@ -207,8 +245,8 @@ _j_/_k_: move down/up  _r_: run cell    _l_: run line  _R_: run above
 				mode = { "n" },
 				body = "<localleader>M", -- this is the key that triggers the hydra
 				heads = {
-					{ "j", keys("]b") },
-					{ "k", keys("[b") },
+					{ "j", ":MoltenNext<CR>" },
+					{ "k", ":MoltenPrev<CR>" },
 					{ "r", ":QuartoSend<CR>" },
 					{ "l", ":QuartoSendLine<CR>" },
 					{ "R", ":QuartoSendAbove<CR>" },
