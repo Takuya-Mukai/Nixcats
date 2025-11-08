@@ -229,7 +229,7 @@ require("lze").load({
 			end
 
 			-- 次のコードブロックの先頭にジャンプ (j)
-			local function go_to_next_code_block_start()
+			function go_to_next_code_block_start()
 				local start_pos = vim.api.nvim_win_get_cursor(0)
 				local current_line = start_pos[1]
 
@@ -253,7 +253,7 @@ require("lze").load({
 			end
 
 			-- 前のコードブロックの先頭にジャンプ (k)
-			local function go_to_prev_code_block_start()
+			function go_to_prev_code_block_start()
 				local start_pos = vim.api.nvim_win_get_cursor(0)
 				local current_line = start_pos[1]
 
@@ -293,8 +293,8 @@ _j_/_k_: move down/up  _r_: run cell    _l_: run line  _R_: run above
 				mode = { "n" },
 				body = "<localleader>M", -- this is the key that triggers the hydra
 				heads = {
-					{ "j", ":lua go_to_next_code_block_start()" },
-					{ "k", ":lua go_to_prev_code_block_start()" },
+					{ "j", ":lua go_to_next_code_block_start()<CR>" },
+					{ "k", ":lua go_to_prev_code_block_start()<CR>" },
 					{ "r", ":QuartoSend<CR>" },
 					{ "l", ":QuartoSendLine<CR>" },
 					{ "R", ":QuartoSendAbove<CR>" },
