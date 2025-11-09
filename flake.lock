@@ -16,6 +16,22 @@
         "type": "github"
       }
     },
+    "neopyter": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1761289595,
+        "narHash": "sha256-BT4ks90tKTuawJKvPjDDU3q9I2mbXZDY7aeFOayJwDo=",
+        "owner": "SUSTech-data",
+        "repo": "neopyter",
+        "rev": "ca88db21900ee5b6e8d6c8dae056c7a442eeb0c1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "SUSTech-data",
+        "repo": "neopyter",
+        "type": "github"
+      }
+    },
     "nixCats": {
       "locked": {
         "lastModified": 1761732732,
@@ -50,8 +66,26 @@
     "root": {
       "inputs": {
         "jupytext-nvim": "jupytext-nvim",
+        "neopyter": "neopyter",
         "nixCats": "nixCats",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "websocket-nvim": "websocket-nvim"
+      }
+    },
+    "websocket-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1713103198,
+        "narHash": "sha256-+Z2RgiqdYWzkEUQRHxqoaiLeekziNaf3bNZEe3dDexI=",
+        "owner": "AbaoFromCUG",
+        "repo": "websocket.nvim",
+        "rev": "8a096d51c957557f939e296c4937f27d5dc596d5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "AbaoFromCUG",
+        "repo": "websocket.nvim",
+        "type": "github"
       }
     }
   },

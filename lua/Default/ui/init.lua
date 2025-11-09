@@ -136,10 +136,6 @@ require("lze").load({
 							["ic"] = { query = "@class.inner", desc = "Select inner part of a class region" },
 							-- You can also use captures from other query groups like `locals.scm`
 							["as"] = { query = "@local.scope", query_group = "locals", desc = "Select language scope" },
-
-							-- jupyter cells
-							["ib"] = { query = "@code_cell.inner", desc = "in block" },
-							["ab"] = { query = "@code_cell.outer", desc = "around block" },
 						},
 						-- You can choose the select mode (default is charwise 'v')
 						--
@@ -180,7 +176,6 @@ require("lze").load({
 							-- Below example nvim-treesitter's `locals.scm` and `folds.scm`. They also provide highlights.scm and indent.scm.
 							["]s"] = { query = "@local.scope", query_group = "locals", desc = "Next scope" },
 							["]z"] = { query = "@fold", query_group = "folds", desc = "Next fold" },
-							["]b"] = { query = "@code_cell.inner", desc = "next code block" },
 						},
 						goto_next_end = {
 							["]M"] = { query = "@function.outer", desc = "Next function end" },
@@ -189,7 +184,6 @@ require("lze").load({
 						goto_previous_start = {
 							["[m"] = { query = "@function.outer", desc = "Previous function start" },
 							["[["] = { query = "@class.outer", desc = "Previous class start" },
-							["[b"] = { query = "@code_cell.inner", desc = "previous code block" },
 						},
 						goto_previous_end = {
 							["[M"] = { query = "@function.outer", desc = "Previous function end" },
@@ -198,26 +192,6 @@ require("lze").load({
 						-- Below will go to either the start or the end, whichever is closer.
 						-- Use if you want more granular movements
 						-- Make it even more gradual by adding multiple queries and regex.
-						--
-						-- jupyter cells
-						goto_next = {
-							["]d"] = { query = "@conditional.outer", desc = "Next closer start or end" },
-						},
-						goto_previous = {
-							["[d"] = { query = "@conditional.outer", desc = "Previous closer start or end" },
-						},
-					},
-					swap = { -- Swap only works with code blocks that are under the same
-						-- markdown header
-						enable = true,
-						swap_next = {
-							-- ... other keymap
-							["<leader>msj"] = { query = "@code_cell.outer", desc = "Swap with next code cell" },
-						},
-						swap_previous = {
-							--- ... other keymap
-							["<leader>msk"] = { "@code_cell.outer", desc = "Swap with previous code cell" },
-						},
 					},
 
 					lsp_interop = {

@@ -28,6 +28,14 @@
       url = "github:GCBallesteros/jupytext.nvim";
       flake = false;
     };
+    websocket-nvim = {
+      url = "github:AbaoFromCUG/websocket.nvim";
+      flake = false;
+    };
+    neopyter = {
+      url = "github:SUSTech-data/neopyter";
+      flake = false;
+    };
 
     # see :help nixCats.flake.inputs
     # If you want your plugin to be loaded by the standard overlay,
@@ -96,6 +104,26 @@
           # (utils.fixSystemizedOverlay inputs.codeium.overlays
           #   (system: inputs.codeium.overlays.${system}.default)
           # )
+
+          (final: prev: {
+            # python3 = prev.python3.override {
+            #   packageOverrides = pyfinal: pyprev: {
+            #     # 1. で定義した my-custom-toolz を "toolz" という名前で
+            #     #    Pythonパッケージセット (ps:) に追加する
+            #     neopyter = pyfinal.callPackage (import ./overlays/neopyter.nix) { };
+            #   };
+            # };
+          })
+          (final: prev: {
+            vimPlugins = prev.vimPlugins // {
+              websocket-nvim = import ./overlays/websocket-nvim.nix { pkgs = prev; };
+            };
+          })
+          (final: prev: {
+            vimPlugins = prev.vimPlugins // {
+              neopyter-nvim = import ./overlays/neopyter-nvim.nix { pkgs = prev; };
+            };
+          })
         ];
 
       # see :help nixCats.flake.outputs.categories
@@ -341,17 +369,22 @@
             jupyter =
               with pkgs.vimPlugins;
               [
-                image-nvim
-                molten-nvim
-                quarto-nvim
-                otter-nvim
                 hydra-nvim
+                websocket-nvim
               ]
               ++ [
                 (pkgs.vimUtils.buildVimPlugin {
                   pname = "jupytext-nvim";
                   version = "git";
                   src = inputs.jupytext-nvim;
+                })
+              ]
+              ++ [
+                (pkgs.vimUtils.buildVimPlugin {
+                  pname = "neopyter-nvim";
+                  version = "git";
+                  src = inputs.neopyter;
+                  doCheck = false;
                 })
               ];
 
@@ -415,16 +448,19 @@
           python3.libraries = {
             general = (
               ps: with ps; [
-                nbformat
-                jupyter-client
-                pyperclip
               ]
             );
             test = (_: [ ]);
           };
           # populates $LUA_PATH and $LUA_CPATH
           extraLuaPackages = {
-            general = [ (_: [ ]) ];
+            general = [
+              (
+                ps: with ps; [
+                  luasocket
+                ]
+              )
+            ];
           };
 
           # see :help nixCats.flake.outputs.categoryDefinitions.default_values
