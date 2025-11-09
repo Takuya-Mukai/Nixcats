@@ -19,7 +19,6 @@ require("Default.code-quality")
 require("Default.lang")
 require("Default.cmp")
 require("Default.jupyter")
-require("markdown_cell_overlay").setup_autocmd()
 
 -- NOTE: we even ask nixCats if we included our debug stuff in this setup! (we didnt)
 -- But we have a good base setup here as an example anyway!

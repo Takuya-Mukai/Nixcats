@@ -1,6 +1,6 @@
 require("lze").load({
 	{
-		"neopyter",
+		"neopyter-nvim",
 		ft = { "python" },
 		after = function()
 			require("neopyter").setup({
@@ -121,7 +121,7 @@ _v_: run visual  _b_: run & insert below _w_: restart & run all
 		end,
 	},
 	{
-		"websocket.nvim",
-		dep_of = { "neopyter" },
+		"websocket-nvim",
+		dep_of = { "neopyter-nvim" },
 	},
 })

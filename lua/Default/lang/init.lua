@@ -21,6 +21,10 @@ require("lze").load({
 					width = "block",
 				},
 			})
+			local overlay = require("Default.markdown_cell_overlay")
+			vim.api.nvim_create_user_command("RenderMarkdownOverlay", function()
+				overlay.render_markdown_cells()
+			end, {})
 		end,
 		ft = { "markdown", "python" },
 	},

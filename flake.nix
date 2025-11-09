@@ -32,7 +32,7 @@
       url = "github:AbaoFromCUG/websocket.nvim";
       flake = false;
     };
-    neopyter = {
+    neopyter-nvim = {
       url = "github:SUSTech-data/neopyter";
       flake = false;
     };
@@ -104,26 +104,6 @@
           # (utils.fixSystemizedOverlay inputs.codeium.overlays
           #   (system: inputs.codeium.overlays.${system}.default)
           # )
-
-          (final: prev: {
-            # python3 = prev.python3.override {
-            #   packageOverrides = pyfinal: pyprev: {
-            #     # 1. で定義した my-custom-toolz を "toolz" という名前で
-            #     #    Pythonパッケージセット (ps:) に追加する
-            #     neopyter = pyfinal.callPackage (import ./overlays/neopyter.nix) { };
-            #   };
-            # };
-          })
-          (final: prev: {
-            vimPlugins = prev.vimPlugins // {
-              websocket-nvim = import ./overlays/websocket-nvim.nix { pkgs = prev; };
-            };
-          })
-          (final: prev: {
-            vimPlugins = prev.vimPlugins // {
-              neopyter-nvim = import ./overlays/neopyter-nvim.nix { pkgs = prev; };
-            };
-          })
         ];
 
       # see :help nixCats.flake.outputs.categories
@@ -370,7 +350,6 @@
               with pkgs.vimPlugins;
               [
                 hydra-nvim
-                websocket-nvim
               ]
               ++ [
                 (pkgs.vimUtils.buildVimPlugin {
@@ -381,9 +360,17 @@
               ]
               ++ [
                 (pkgs.vimUtils.buildVimPlugin {
+                  pname = "websocket-nvim";
+                  version = "git";
+                  src = inputs.websocket-nvim;
+                  doCheck = false;
+                })
+              ]
+              ++ [
+                (pkgs.vimUtils.buildVimPlugin {
                   pname = "neopyter-nvim";
                   version = "git";
-                  src = inputs.neopyter;
+                  src = inputs.neopyter-nvim;
                   doCheck = false;
                 })
               ];
@@ -457,7 +444,6 @@
             general = [
               (
                 ps: with ps; [
-                  luasocket
                 ]
               )
             ];
