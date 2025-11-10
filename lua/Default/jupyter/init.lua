@@ -7,20 +7,41 @@ require("lze").load({
 				mode = "direct",
 				remote_address = "127.0.0.1:9001",
 				file_pattern = "*.ju.*",
-				on_attach = function(bufnr)
-					local opts = { buffer = bufnr, remap = false }
-					vim.keymap.set("n", "<leader>jc", function()
-						require("neopyter").run_cell()
-					end, opts)
-					vim.keymap.set("n", "<leader>jr", function()
-						require("neopyter").run_all()
-					end, opts)
-					vim.keymap.set("n", "<leader>jf", function()
-						require("neopyter").run_file()
-					end, opts)
-					vim.keymap.set("n", "<leader>jR", function()
-						require("neopyter").restart_kernel()
-					end, opts)
+				on_attach = function(buf)
+					local function map(mode, lhs, rhs, desc)
+						vim.keymap.set(mode, lhs, rhs, { desc = desc, buffer = buf })
+					end
+					-- same, recommend the former
+					map("n", "<C-Enter>", "<cmd>Neopyter execute notebook:run-cell<cr>", "run selected")
+					-- map("n", "<C-Enter>", "<cmd>Neopyter run current<cr>", "run selected")
+
+					-- same, recommend the former
+					map("n", "<leader>jX", "<cmd>Neopyter execute notebook:run-all-above<cr>", "run all above cell")
+					-- map("n", "<space>X", "<cmd>Neopyter run allAbove<cr>", "run all above cell")
+
+					-- same, recommend the former, but the latter is silent
+					map("n", "<leader>js", "<cmd>Neopyter execute kernelmenu:restart<cr>", "restart kernel")
+					-- map("n", "<space>nt", "<cmd>Neopyter kernel restart<cr>", "restart kernel")
+
+					map(
+						"n",
+						"<S-Enter>",
+						"<cmd>Neopyter execute notebook:run-cell-and-select-next<cr>",
+						"run selected and select next"
+					)
+					map(
+						"n",
+						"<M-Enter>",
+						"<cmd>Neopyter execute notebook:run-cell-and-insert-below<cr>",
+						"run selected and insert below"
+					)
+
+					map(
+						"n",
+						"<leader>jr",
+						"<cmd>Neopyter execute notebook:restart-run-all<cr>",
+						"restart kernel and run all"
+					)
 				end,
 			})
 		end,
