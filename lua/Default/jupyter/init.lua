@@ -33,7 +33,7 @@ require("lze").load({
 	},
 	{
 		"hydra.nvim",
-		dep_of = { "neopyter" },
+		dep_of = { "neopyter-nvim" },
 		after = function()
 			local function keys(str)
 				return function()
@@ -112,7 +112,7 @@ _v_: run visual  _b_: run & insert below _w_: restart & run all
 					{ "R", ":Neopyter execute notebook:run-all-above<CR>" },
 					{ "v", ":Neopyter execute notebook:run-cell-and-select-next<CR>" },
 					{ "b", ":Neopyter execute notebook:run-cell-and-insert-below<CR>" },
-					{ "a", ":Neopyter execute notebook:restart-run-all<CR>" },
+					{ "w", ":Neopyter execute notebook:restart-run-all<CR>" },
 					{ "s", ":Neopyter execute kernelmenu:restart<CR>" },
 					{ "<esc>", nil, { exit = true } },
 					{ "q", nil, { exit = true } },
