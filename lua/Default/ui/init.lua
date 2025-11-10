@@ -91,8 +91,8 @@ require("lze").load({
 	-- },
 	{
 		"nvim-treesitter",
-		lazy = true,
-		event = "BufReadPost",
+		-- lazy = true,
+		-- event = "BufReadPost",
 		dep_of = {
 			"nvim-treesitter-textobjects",
 			"nvim-treesitter-refactor",
