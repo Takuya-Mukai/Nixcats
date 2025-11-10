@@ -6,7 +6,7 @@ require("lze").load({
 			require("neopyter").setup({
 				mode = "direct",
 				remote_address = "127.0.0.1:9001",
-				file_pattern = "*.ju.*",
+				file_pattern = "*.py",
 				on_attach = function(buf)
 					local function map(mode, lhs, rhs, desc)
 						vim.keymap.set(mode, lhs, rhs, { desc = desc, buffer = buf })
@@ -71,7 +71,7 @@ require("lze").load({
 				vim.api.nvim_win_set_cursor(0, { current_line + 1, 0 })
 
 				-- ```<word> のパターン (インデント対応)
-				local pattern = "^\\s*# %%\\S\\+"
+				local pattern = "^\\s*# %%\\S*"
 
 				-- 'W' (ラップしない) フラグで順方向に検索
 				local found_pos = vim.fn.searchpos(pattern, "W")
@@ -94,7 +94,7 @@ require("lze").load({
 				-- 現在行の前から検索
 				vim.api.nvim_win_set_cursor(0, { current_line - 1, 0 })
 
-				local pattern = "^\\s*# %%\\S\\+"
+				local pattern = "^\\s*# %%\\S*"
 
 				-- 'bW' (後方 'b' + ラップしない 'W') フラグで逆方向に検索
 				local found_pos = vim.fn.searchpos(pattern, "bW")
