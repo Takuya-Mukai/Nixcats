@@ -6,7 +6,7 @@ require("lze").load({
 			require("neopyter").setup({
 				mode = "direct",
 				remote_address = "127.0.0.1:9001",
-				file_pattern = "*.py",
+				file_pattern = "*.ju.*",
 				on_attach = function(buf)
 					local function map(mode, lhs, rhs, desc)
 						vim.keymap.set(mode, lhs, rhs, { desc = desc, buffer = buf })
