@@ -141,6 +141,7 @@
               delta
               sqlite
             ];
+
             python = with pkgs; [
               python3Packages.jupytext
               python3Packages.cairosvg
@@ -260,30 +261,26 @@
           # `:NixCats pawsible` command to see them all
           optionalPlugins = {
             # あなたのカテゴリ分けに合わせてプラグインを配置
-            ui =
-              with pkgs.vimPlugins;
-              [
-                # treesitter本体と関連プラグイン
-                nvim-treesitter
-                nvim-treesitter-context
-                nvim-treesitter-textobjects
-                nvim-treesitter-refactor
+            ui = with pkgs.vimPlugins; [
+              # treesitter本体と関連プラグイン
+              nvim-treesitter
+              nvim-treesitter.withAllGrammers
+              nvim-treesitter-context
+              nvim-treesitter-textobjects
+              nvim-treesitter-refactor
 
-                rainbow-delimiters-nvim
-                smear-cursor-nvim
-                nvim-highlight-colors
-                gitsigns-nvim
-                git-conflict-nvim
-                lualine-nvim
-                neoscroll-nvim
-                nvim-web-devicons
-                nvim-scrollview
-                hlchunk-nvim
-                # hlargs-nvim
-              ]
-              ++ builtins.filter pkgs.lib.isDerivation (
-                builtins.attrValues pkgs.vimPlugins.nvim-treesitter-parsers
-              );
+              rainbow-delimiters-nvim
+              smear-cursor-nvim
+              nvim-highlight-colors
+              gitsigns-nvim
+              git-conflict-nvim
+              lualine-nvim
+              neoscroll-nvim
+              nvim-web-devicons
+              nvim-scrollview
+              hlchunk-nvim
+              # hlargs-nvim
+            ];
 
             edit = with pkgs.vimPlugins; [
               comment-nvim
