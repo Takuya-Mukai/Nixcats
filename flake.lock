@@ -63,12 +63,29 @@
         "type": "github"
       }
     },
+    "nvim-treesitter": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1748094813,
+        "narHash": "sha256-CVs9FTdg3oKtRjz2YqwkMr0W5qYLGfVyxyhE3qnGYbI=",
+        "owner": "nvim-treesitter",
+        "repo": "nvim-treesitter",
+        "rev": "42fc28ba918343ebfd5565147a42a26580579482",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nvim-treesitter",
+        "repo": "nvim-treesitter",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "jupytext-nvim": "jupytext-nvim",
         "neopyter-nvim": "neopyter-nvim",
         "nixCats": "nixCats",
         "nixpkgs": "nixpkgs",
+        "nvim-treesitter": "nvim-treesitter",
         "websocket-nvim": "websocket-nvim"
       }
     },
