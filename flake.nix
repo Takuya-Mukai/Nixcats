@@ -366,11 +366,9 @@
                   pname = "vim-jukit";
                   version = "git";
                   src = inputs.vim-jukit;
-                  postInstall = ''
-                    substituteInPlace $out/plugin/jukit.vim \
-                      --replace "jukit#util#plugin_path() . '/helpers/.encodings'" \
-                      "g:jukit_config_dir . '/.encodings'"
-                  '';
+                  patches = [
+                    ./fix-encodings-path.patch
+                  ];
                 })
               ];
             # ++ [
