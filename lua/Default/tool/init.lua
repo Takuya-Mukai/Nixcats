@@ -15,7 +15,7 @@ require("lze").load({
 		---@type snacks.Config
 		after = function()
 			require("snacks").setup({
-				bigfile = { enabled = true },
+				bigfile = { enabled = false },
 				-- dashboard = { enabled = true },
 				explorer = { enabled = true },
 				indent = { enabled = false },

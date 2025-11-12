@@ -1,37 +1,5 @@
 {
   "nodes": {
-    "jupytext-nvim": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1712342824,
-        "narHash": "sha256-LBBRZOSqn70qruSA/vbPMTzS7y05F/z4EqC+5JlU6NM=",
-        "owner": "GCBallesteros",
-        "repo": "jupytext.nvim",
-        "rev": "c8baf3ad344c59b3abd461ecc17fc16ec44d0f7b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "GCBallesteros",
-        "repo": "jupytext.nvim",
-        "type": "github"
-      }
-    },
-    "neopyter-nvim": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1761289595,
-        "narHash": "sha256-BT4ks90tKTuawJKvPjDDU3q9I2mbXZDY7aeFOayJwDo=",
-        "owner": "SUSTech-data",
-        "repo": "neopyter",
-        "rev": "ca88db21900ee5b6e8d6c8dae056c7a442eeb0c1",
-        "type": "github"
-      },
-      "original": {
-        "owner": "SUSTech-data",
-        "repo": "neopyter",
-        "type": "github"
-      }
-    },
     "nixCats": {
       "locked": {
         "lastModified": 1762227818,
@@ -63,45 +31,26 @@
         "type": "github"
       }
     },
-    "nvim-treesitter": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1748094813,
-        "narHash": "sha256-CVs9FTdg3oKtRjz2YqwkMr0W5qYLGfVyxyhE3qnGYbI=",
-        "owner": "nvim-treesitter",
-        "repo": "nvim-treesitter",
-        "rev": "42fc28ba918343ebfd5565147a42a26580579482",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nvim-treesitter",
-        "repo": "nvim-treesitter",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
-        "jupytext-nvim": "jupytext-nvim",
-        "neopyter-nvim": "neopyter-nvim",
         "nixCats": "nixCats",
         "nixpkgs": "nixpkgs",
-        "nvim-treesitter": "nvim-treesitter",
-        "websocket-nvim": "websocket-nvim"
+        "vim-jukit": "vim-jukit"
       }
     },
-    "websocket-nvim": {
+    "vim-jukit": {
       "flake": false,
       "locked": {
-        "lastModified": 1713103198,
-        "narHash": "sha256-+Z2RgiqdYWzkEUQRHxqoaiLeekziNaf3bNZEe3dDexI=",
-        "owner": "AbaoFromCUG",
-        "repo": "websocket.nvim",
-        "rev": "8a096d51c957557f939e296c4937f27d5dc596d5",
+        "lastModified": 1697989051,
+        "narHash": "sha256-wWpa08WG0CGQiI3G7g6k2ruSnyAXxmRJ1OW26oyoBgE=",
+        "owner": "luk400",
+        "repo": "vim-jukit",
+        "rev": "73214c9a8abc4b6aa7a6266b5bc2ddbf8b3e3c00",
         "type": "github"
       },
       "original": {
-        "owner": "AbaoFromCUG",
-        "repo": "websocket.nvim",
+        "owner": "luk400",
+        "repo": "vim-jukit",
         "type": "github"
       }
     }

@@ -24,22 +24,26 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixCats.url = "github:BirdeeHub/nixCats-nvim";
-    jupytext-nvim = {
-      url = "github:GCBallesteros/jupytext.nvim";
+    vim-jukit = {
+      url = "github:luk400/vim-jukit";
       flake = false;
     };
-    websocket-nvim = {
-      url = "github:AbaoFromCUG/websocket.nvim";
-      flake = false;
-    };
-    neopyter-nvim = {
-      url = "github:SUSTech-data/neopyter";
-      flake = false;
-    };
-    nvim-treesitter = {
-      url = "github:nvim-treesitter/nvim-treesitter";
-      flake = false;
-    };
+    # jupytext-nvim = {
+    #   url = "github:GCBallesteros/jupytext.nvim";
+    #   flake = false;
+    # };
+    # websocket-nvim = {
+    #   url = "github:AbaoFromCUG/websocket.nvim";
+    #   flake = false;
+    # };
+    # neopyter-nvim = {
+    #   url = "github:SUSTech-data/neopyter";
+    #   flake = false;
+    # };
+    # nvim-treesitter = {
+    #   url = "github:nvim-treesitter/nvim-treesitter";
+    #   flake = false;
+    # };
 
     # see :help nixCats.flake.inputs
     # If you want your plugin to be loaded by the standard overlay,
@@ -144,6 +148,7 @@
               fd
               delta
               sqlite
+              imagemagick
             ];
 
             python = with pkgs; [
@@ -265,35 +270,26 @@
           # `:NixCats pawsible` command to see them all
           optionalPlugins = {
             # あなたのカテゴリ分けに合わせてプラグインを配置
-            ui =
-              with pkgs.vimPlugins;
-              [
-                # treesitter本体と関連プラグイン
-                # nvim-treesitter
-                nvim-treesitter.withAllGrammars
-                nvim-treesitter-context
-                nvim-treesitter-textobjects
-                nvim-treesitter-refactor
+            ui = with pkgs.vimPlugins; [
+              # treesitter本体と関連プラグイン
+              nvim-treesitter
+              nvim-treesitter.withAllGrammars
+              nvim-treesitter-context
+              nvim-treesitter-textobjects
+              nvim-treesitter-refactor
 
-                rainbow-delimiters-nvim
-                smear-cursor-nvim
-                nvim-highlight-colors
-                gitsigns-nvim
-                git-conflict-nvim
-                lualine-nvim
-                neoscroll-nvim
-                nvim-web-devicons
-                nvim-scrollview
-                hlchunk-nvim
-                # hlargs-nvim
-              ]
-              ++ [
-                (pkgs.vimUtils.buildVimPlugin {
-                  pname = "nvim-treesitter";
-                  version = "git";
-                  src = inputs.nvim-treesitter;
-                })
-              ];
+              rainbow-delimiters-nvim
+              smear-cursor-nvim
+              nvim-highlight-colors
+              gitsigns-nvim
+              git-conflict-nvim
+              lualine-nvim
+              neoscroll-nvim
+              nvim-web-devicons
+              nvim-scrollview
+              hlchunk-nvim
+              # hlargs-nvim
+            ];
 
             edit = with pkgs.vimPlugins; [
               comment-nvim
@@ -367,27 +363,39 @@
               ]
               ++ [
                 (pkgs.vimUtils.buildVimPlugin {
-                  pname = "jupytext-nvim";
+                  pname = "vim-jukit";
                   version = "git";
-                  src = inputs.jupytext-nvim;
-                })
-              ]
-              ++ [
-                (pkgs.vimUtils.buildVimPlugin {
-                  pname = "websocket-nvim";
-                  version = "git";
-                  src = inputs.websocket-nvim;
-                  doCheck = false;
-                })
-              ]
-              ++ [
-                (pkgs.vimUtils.buildVimPlugin {
-                  pname = "neopyter-nvim";
-                  version = "git";
-                  src = inputs.neopyter-nvim;
-                  doCheck = false;
+                  src = inputs.vim-jukit;
+                  postInstall = ''
+                    substituteInPlace $out/plugin/jukit.vim \
+                      --replace 'jukit#util#plugin_path() . "/helpers/.encodings"' \
+                      'g:jukit_config_dir . "/.encodings"'
+                  '';
                 })
               ];
+            # ++ [
+            #   (pkgs.vimUtils.buildVimPlugin {
+            #     pname = "jupytext-nvim";
+            #     version = "git";
+            #     src = inputs.jupytext-nvim;
+            #   })
+            # ]
+            # ++ [
+            #   (pkgs.vimUtils.buildVimPlugin {
+            #     pname = "websocket-nvim";
+            #     version = "git";
+            #     src = inputs.websocket-nvim;
+            #     doCheck = false;
+            #   })
+            # ]
+            # ++ [
+            #   (pkgs.vimUtils.buildVimPlugin {
+            #     pname = "neopyter-nvim";
+            #     version = "git";
+            #     src = inputs.neopyter-nvim;
+            #     doCheck = false;
+            #   })
+            # ];
 
             cmp = with pkgs.vimPlugins; [
               friendly-snippets
