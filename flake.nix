@@ -368,8 +368,8 @@
                   src = inputs.vim-jukit;
                   postInstall = ''
                     substituteInPlace $out/plugin/jukit.vim \
-                      --replace 'jukit#util#plugin_path() . "/helpers/.encodings"' \
-                      'g:jukit_config_dir . "/.encodings"'
+                      --replace "jukit#util#plugin_path() . '/helpers/.encodings'" \
+                      "g:jukit_config_dir . '/.encodings'"
                   '';
                 })
               ];
