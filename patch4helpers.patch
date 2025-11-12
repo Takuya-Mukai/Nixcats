@@ -1,0 +1,97 @@
+diff -ru a/helpers/ipynb_convert/convert.py b/helpers/ipynb_convert/convert.py
+--- a/helpers/ipynb_convert/convert.py	2025-11-12 20:28:00.232403288 +0900
++++ b/helpers/ipynb_convert/convert.py	2025-11-12 20:44:38.812560056 +0900
+@@ -4,7 +4,7 @@
+ HEADER = "|%%--%%|"
+ MD_MARK = "°°°"
+ MODULE_PATH = os.path.dirname(os.path.abspath(__file__))
+-with open(os.path.join(MODULE_PATH, "..", ".encodings"), "r") as f:
++with open(os.path.expanduser("~/.local/share/jukit-nvim/.encodings"), "r") as f:
+     ENCODING = f.read().strip()
+ 
+ 
+@@ -177,10 +177,10 @@
+ 
+ 
+ if __name__ == "__main__":
+-    from util import *
+     from languages import languages as lang
++    from util import *
+ 
+     main()
+ else:
+-    from .util import *
+     from .languages import languages as lang
++    from .util import *
+diff -ru a/helpers/ipynb_convert/util.py b/helpers/ipynb_convert/util.py
+--- a/helpers/ipynb_convert/util.py	2025-11-12 20:28:00.232403288 +0900
++++ b/helpers/ipynb_convert/util.py	2025-11-12 20:29:46.366923704 +0900
+@@ -3,7 +3,7 @@
+ from typing import Union
+ 
+ MODULE_PATH = os.path.dirname(os.path.abspath(__file__))
+-with open(os.path.join(MODULE_PATH, "..", ".encodings"), "r") as f:
++with open(os.path.expanduser("~/.local/share/jukit-nvim/.encodings"), "r") as f:
+     ENCODING = f.read().strip()
+ 
+ 
+diff -ru a/helpers/jukit_run/jukit_run.py b/helpers/jukit_run/jukit_run.py
+--- a/helpers/jukit_run/jukit_run.py	2025-11-12 20:28:00.232576814 +0900
++++ b/helpers/jukit_run/jukit_run.py	2025-11-12 20:39:33.738608097 +0900
+@@ -17,7 +17,7 @@
+ from .input_styles import display_functions, display_style_2
+ 
+ MODULE_PATH = os.path.dirname(os.path.abspath(__file__))
+-with open(os.path.join(MODULE_PATH, "..", ".encodings"), "r") as f:
++with open(os.path.expanduser("~/.local/share/jukit-nvim/.encodings"), "r") as f:
+     ENCODING = f.read().strip()
+ 
+ 
+diff -ru a/helpers/jukit_run/util.py b/helpers/jukit_run/util.py
+--- a/helpers/jukit_run/util.py	2025-11-12 20:28:00.232576814 +0900
++++ b/helpers/jukit_run/util.py	2025-11-12 20:39:55.715119294 +0900
+@@ -5,7 +5,7 @@
+ from IPython.core.interactiveshell import InteractiveShell
+ 
+ MODULE_PATH = os.path.dirname(os.path.abspath(__file__))
+-with open(os.path.join(MODULE_PATH, "..", ".encodings"), "r") as f:
++with open(os.path.expanduser("~/.local/share/jukit-nvim/.encodings"), "r") as f:
+     ENCODING = f.read().strip()
+ 
+ 
+diff -ru a/helpers/ueberzug_output/create_template.py b/helpers/ueberzug_output/create_template.py
+--- a/helpers/ueberzug_output/create_template.py	2025-11-12 20:28:00.233644529 +0900
++++ b/helpers/ueberzug_output/create_template.py	2025-11-12 20:36:16.961219430 +0900
+@@ -10,7 +10,7 @@
+ JUPYTER_CMD = "jupyter"
+ CUTYCAPT_CMD = "cutycapt"
+ IMAGEMAGICK_CMD = "convert"
+-with open(os.path.join(MODULE_PATH, "..", ".encodings"), "r") as f:
++with open(os.path.expanduser("~/.local/sahre/jukit-nvim/.encodings"), "r") as f:
+     ENCODING = f.read().strip()
+ 
+ ps = lambda str_: str_.replace(" ", r"\ ")
+diff -ru a/helpers/ueberzug_output/prepare_html.py b/helpers/ueberzug_output/prepare_html.py
+--- a/helpers/ueberzug_output/prepare_html.py	2025-11-12 20:28:00.233644529 +0900
++++ b/helpers/ueberzug_output/prepare_html.py	2025-11-12 20:36:02.172732701 +0900
+@@ -3,7 +3,7 @@
+ from bs4 import BeautifulSoup as bs
+ 
+ MODULE_PATH = os.path.dirname(os.path.abspath(__file__))
+-with open(os.path.join(MODULE_PATH, "..", ".encodings"), "r") as f:
++with open(os.path.expanduser("~/.local/share/jukit-nvim/.encodings"), "r") as f:
+     ENCODING = f.read().strip()
+ 
+ 
+diff -ru a/helpers/ueberzug_output/show_output.py b/helpers/ueberzug_output/show_output.py
+--- a/helpers/ueberzug_output/show_output.py	2025-11-12 20:28:00.233644529 +0900
++++ b/helpers/ueberzug_output/show_output.py	2025-11-12 20:39:05.694600608 +0900
+@@ -11,7 +11,7 @@
+ import shutil
+ 
+ MODULE_PATH = os.path.dirname(os.path.abspath(__file__))
+-with open(os.path.join(MODULE_PATH, "..", ".encodings"), "r") as f:
++with open(os.path.expanduser("~/.local/share/jukit-nvim/.encodings"), "r") as f:
+     ENCODING = f.read().strip()
+ 
+ HTMLPREP_SCRIPT = os.path.join(MODULE_PATH, "prepare_html.py")

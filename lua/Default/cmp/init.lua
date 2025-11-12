@@ -220,9 +220,6 @@ require("lze").load({
 				},
 
 				sources = {
-					per_filetype = {
-						python = { inherit_defaults = true, "neopyter" },
-					},
 					-- Remove 'buffer' if you don't want text completions, by default it's only enabled when LSP returns no items
 					default = {
 						"lsp",
@@ -269,12 +266,6 @@ require("lze").load({
 							name = "Spell",
 							module = "blink-cmp-spell",
 							enabled = true,
-						},
-						neopyter = {
-							name = "Neopyter",
-							module = "neopyter.blink",
-							---@type neopyter.BlinkCompleterOption
-							opts = {},
 						},
 					},
 				},

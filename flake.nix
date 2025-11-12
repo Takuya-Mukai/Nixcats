@@ -368,6 +368,7 @@
                   src = inputs.vim-jukit;
                   patches = [
                     ./fix-encodings-path.patch
+                    ./patch4helpers.patch
                   ];
                 })
               ];
