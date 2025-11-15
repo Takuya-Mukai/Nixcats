@@ -9,6 +9,64 @@ require("lze").load({
 		dep_of = "plenary.nvim",
 	},
 	{
+		"flash.nvim",
+		event = "DeferredUIEnter",
+		after = function()
+			require("flash").setup({})
+		end,
+		keys = {
+			{
+				"s",
+				mode = { "n", "x", "o" },
+				function()
+					require("flash").jump()
+				end,
+				desc = "Flash",
+			},
+			{
+				"S",
+				mode = { "n", "x", "o" },
+				function()
+					require("flash").treesitter()
+				end,
+				desc = "Flash Treesitter",
+			},
+			{
+				"r",
+				mode = "o",
+				function()
+					require("flash").remote()
+				end,
+				desc = "Remote Flash",
+			},
+			{
+				"R",
+				mode = { "o", "x" },
+				function()
+					require("flash").treesitter_search()
+				end,
+				desc = "Treesitter Search",
+			},
+			{
+				"<c-s>",
+				mode = { "c" },
+				function()
+					require("flash").toggle()
+				end,
+				desc = "Toggle Flash Search",
+			},
+		},
+	},
+	{
+		"undotree",
+		after = function()
+			require("undotree").setup({})
+		end,
+		keys = { -- load the plugin only when using it's keybinding:
+			{ "<leader>u", "<cmd>lua require('undotree').toggle()<cr>", desc = "Undo Tree" },
+		},
+	},
+	{
 		"snacks.nvim",
 		priority = 1000,
 		lazy = false,

@@ -144,3 +144,9 @@ vim.keymap.set(
 	"o<CR># %% [markdown]<CR># ",
 	{ noremap = true, silent = true, desc = "Insert markdown cell (# %% [markdown])" }
 )
+vim.keymap.set(
+	"n",
+	"<leader>jc",
+	"o<CR># %%<CR># ",
+	{ noremap = true, silent = true, desc = "Insert code cell (# %%)" }
+)

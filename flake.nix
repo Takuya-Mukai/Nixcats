@@ -298,20 +298,13 @@
             ];
 
             tool = with pkgs.vimPlugins; [
-              vim-startuptime
+              flash-nvim
               which-key-nvim
               toggleterm-nvim
               diffview-nvim
               snacks-nvim
               yazi-nvim
-              # oil-nvim
-              # oil-git-status-nvim
-              # undotree
-              # telescope本体と高速化のための拡張
-              # telescope-nvim
-              # telescope-fzf-native-nvim
-              # telescope-ui-select-nvim
-              # telescope-undo-nvim
+              undotree
             ];
 
             notification = with pkgs.vimPlugins; [
