@@ -24,8 +24,8 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixCats.url = "github:BirdeeHub/nixCats-nvim";
-    vim-jukit = {
-      url = "github:luk400/vim-jukit";
+    nvim-jukit = {
+      url = "github:Takuya-Mukai/nvim-jukit";
       flake = false;
     };
     # jupytext-nvim = {
@@ -356,13 +356,14 @@
               ]
               ++ [
                 (pkgs.vimUtils.buildVimPlugin {
-                  pname = "vim-jukit";
+                  pname = "nvim-jukit";
                   version = "git";
-                  src = inputs.vim-jukit;
-                  patches = [
-                    ./fix-encodings-path.patch
-                    ./patch4helpers.patch
-                  ];
+                  src = inputs.nvim-jukit;
+                  doCheck = false;
+                  # patches = [
+                  #   ./fix-encodings-path.patch
+                  #   ./patch4helpers.patch
+                  # ];
                 })
               ];
             # ++ [

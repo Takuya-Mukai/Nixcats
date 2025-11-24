@@ -1,20 +1,29 @@
 require("lze").load({
 	{
-		"vim-jukit",
-		ft = { "json" },
-		after = function() end,
+		"nvim-jupytext",
+		after = function()
+			require("jupytext").setup({})
+		end,
+	},
+	{
+		"nvim-jukit",
+		dep_of = { "hydra.nvim" },
+		ft = { "python" },
+		after = function()
+			require("jukit").setup({})
+		end,
 	},
 	{
 		"hydra.nvim",
-		dep_of = { "vim-jukit" },
 		after = function()
 			local hydra = require("hydra")
+			local jukit_cell = require("jukit.core.cells")
+			local jukit_send = require("jukit.core.send")
 			hydra({
 				name = "JupyterNavigator",
 				hint = [[
 _J_/_K_: move down/up  _r_: run cell     _R_: run above
-_v_: run visual  _b_: run & insert below _w_: restart & run all
-                  _s_: restart kernel]],
+      _v_: run visual  _b_: run & insert below]],
 				config = {
 					color = "pink",
 					invoke_on_body = true,
@@ -27,14 +36,42 @@ _v_: run visual  _b_: run & insert below _w_: restart & run all
 				mode = { "n" },
 				body = "<localleader>j", -- this is the key that triggers the hydra
 				heads = {
-					{ "J", ":lua go_to_next_code_block_start()<CR>" },
-					{ "K", ":lua go_to_prev_code_block_start()<CR>" },
-					{ "r", ":Neopyter execute notebook:run-cell<CR>" },
-					{ "R", ":Neopyter execute notebook:run-all-above<CR>" },
-					{ "v", ":Neopyter execute notebook:run-cell-and-select-next<CR>" },
-					{ "b", ":Neopyter execute notebook:run-cell-and-insert-below<CR>" },
-					{ "w", ":Neopyter execute notebook:restart-run-all<CR>" },
-					{ "s", ":Neopyter execute kernelmenu:restart<CR>" },
+					{
+						"J",
+						function()
+							jukit_cell.jump_to_next()
+						end,
+					},
+					{
+						"K",
+						function()
+							jukit_cell.jump_to_previous()
+						end,
+					},
+					{
+						"r",
+						function()
+							jukit_send.send_cell()
+						end,
+					},
+					{
+						"l",
+						function()
+							jukit_send.send_line()
+						end,
+					},
+					{
+						"v",
+						function()
+							jukit_send.send_selection()
+						end,
+					},
+					{
+						"a",
+						function()
+							require("jukit.terminals.kitty").run_all_cells()
+						end,
+					},
 					{ "<esc>", nil, { exit = true } },
 					{ "q", nil, { exit = true } },
 				},
