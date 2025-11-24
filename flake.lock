@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "jupytext-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1712342824,
+        "narHash": "sha256-LBBRZOSqn70qruSA/vbPMTzS7y05F/z4EqC+5JlU6NM=",
+        "owner": "GCBallesteros",
+        "repo": "jupytext.nvim",
+        "rev": "c8baf3ad344c59b3abd461ecc17fc16ec44d0f7b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "GCBallesteros",
+        "repo": "jupytext.nvim",
+        "type": "github"
+      }
+    },
     "nixCats": {
       "locked": {
         "lastModified": 1763330129,
@@ -49,6 +65,7 @@
     },
     "root": {
       "inputs": {
+        "jupytext-nvim": "jupytext-nvim",
         "nixCats": "nixCats",
         "nixpkgs": "nixpkgs",
         "nvim-jukit": "nvim-jukit"

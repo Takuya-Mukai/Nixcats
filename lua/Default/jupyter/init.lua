@@ -1,6 +1,6 @@
 require("lze").load({
 	{
-		"nvim-jupytext",
+		"jupytext-nvim",
 		after = function()
 			require("jupytext").setup({})
 		end,
@@ -22,8 +22,8 @@ require("lze").load({
 			hydra({
 				name = "JupyterNavigator",
 				hint = [[
-_J_/_K_: move down/up  _r_: run cell     _R_: run above
-      _v_: run visual  _b_: run & insert below]],
+_J_/_K_: move down/up  _r_: run cell _l_: send line
+    _v_: run visual  _a_: run all]],
 				config = {
 					color = "pink",
 					invoke_on_body = true,

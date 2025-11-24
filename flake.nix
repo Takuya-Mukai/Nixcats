@@ -28,10 +28,10 @@
       url = "github:Takuya-Mukai/nvim-jukit";
       flake = false;
     };
-    # jupytext-nvim = {
-    #   url = "github:GCBallesteros/jupytext.nvim";
-    #   flake = false;
-    # };
+    jupytext-nvim = {
+      url = "github:GCBallesteros/jupytext.nvim";
+      flake = false;
+    };
     # websocket-nvim = {
     #   url = "github:AbaoFromCUG/websocket.nvim";
     #   flake = false;
@@ -152,10 +152,6 @@
             ];
 
             python = with pkgs; [
-              python3Packages.jupytext
-              python3Packages.cairosvg
-              python3Packages.pnglatex
-
               pyright
               ruff
               black
@@ -365,14 +361,14 @@
                   #   ./patch4helpers.patch
                   # ];
                 })
+              ]
+              ++ [
+                (pkgs.vimUtils.buildVimPlugin {
+                  pname = "jupytext-nvim";
+                  version = "git";
+                  src = inputs.jupytext-nvim;
+                })
               ];
-            # ++ [
-            #   (pkgs.vimUtils.buildVimPlugin {
-            #     pname = "jupytext-nvim";
-            #     version = "git";
-            #     src = inputs.jupytext-nvim;
-            #   })
-            # ]
             # ++ [
             #   (pkgs.vimUtils.buildVimPlugin {
             #     pname = "websocket-nvim";
@@ -450,6 +446,7 @@
           python3.libraries = {
             general = (
               ps: with ps; [
+                jupytext
               ]
             );
             test = (_: [ ]);
