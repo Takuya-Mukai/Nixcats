@@ -18,7 +18,7 @@ require("lze").load({
 		end,
 	},
 	{
-		"image-nvim",
+		"image.nvim",
 		dep_of = { "jovian-nvim" },
 		after = function()
 			require("image").setup({
