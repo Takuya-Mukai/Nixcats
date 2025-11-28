@@ -50,11 +50,11 @@
     "nvim-jukit": {
       "flake": false,
       "locked": {
-        "lastModified": 1764073402,
-        "narHash": "sha256-huE+8xUAr4NB7BfMJprQEW1tFNgXXxO66gEysFBmcD8=",
+        "lastModified": 1764084623,
+        "narHash": "sha256-Me4gxB/dKUqniRu+vTUyupmjJOeJQDliEj3LIIvt6YE=",
         "owner": "Takuya-Mukai",
         "repo": "nvim-jukit",
-        "rev": "1eb579d41430aa4b38875ead024d9553b5e15734",
+        "rev": "08cc6103ea430f71ae875018f02e2843639fb9c4",
         "type": "github"
       },
       "original": {
