@@ -349,6 +349,7 @@
               with pkgs.vimPlugins;
               [
                 hydra-nvim
+                image-nvim
               ]
               ++ [
                 (pkgs.vimUtils.buildVimPlugin {

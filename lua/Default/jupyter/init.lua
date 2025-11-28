@@ -17,6 +17,16 @@ require("lze").load({
 			})
 		end,
 	},
+	{
+		"image-nvim",
+		dep_of = { "jovian-nvim" },
+		after = function()
+			require("image").setup({
+				backend = "kitty",
+				processor = "magick_cli",
+			})
+		end,
+	},
 	-- 	{
 	-- 		"hydra.nvim",
 	-- 		after = function()
