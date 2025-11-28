@@ -24,8 +24,8 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixCats.url = "github:BirdeeHub/nixCats-nvim";
-    nvim-jukit = {
-      url = "github:Takuya-Mukai/nvim-jukit";
+    jovian-nvim = {
+      url = "github:Takuya-Mukai/jovian.nvim/v0.1.1";
       flake = false;
     };
     jupytext-nvim = {
@@ -352,9 +352,9 @@
               ]
               ++ [
                 (pkgs.vimUtils.buildVimPlugin {
-                  pname = "nvim-jukit";
+                  pname = "jovian-nvim";
                   version = "git";
-                  src = inputs.nvim-jukit;
+                  src = inputs.jovian-nvim;
                   doCheck = false;
                   # patches = [
                   #   ./fix-encodings-path.patch

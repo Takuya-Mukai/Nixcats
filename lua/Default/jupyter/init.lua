@@ -6,11 +6,15 @@ require("lze").load({
 		end,
 	},
 	{
-		"nvim-jukit",
+		"jovian-nvim",
 		dep_of = { "hydra.nvim" },
 		ft = { "python" },
 		after = function()
-			require("jukit").setup({})
+			require("jovian").setup({
+				preview_width_percent = 30,
+				repl_height_percent = 30,
+				preview_image_ratio = 0.3,
+			})
 		end,
 	},
 	{
