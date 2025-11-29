@@ -3,16 +3,16 @@
     "jovian-nvim": {
       "flake": false,
       "locked": {
-        "lastModified": 1764354112,
-        "narHash": "sha256-kUq5DFtUUgCAQy7EvRsiAblxGe4pKRplvDAbicdu+hY=",
+        "lastModified": 1764409606,
+        "narHash": "sha256-uKQLOZDz/xJLmTv5t1Vp679cODICP0lqsKtqK+oH8k4=",
         "owner": "Takuya-Mukai",
         "repo": "jovian.nvim",
-        "rev": "ba20d82fbff36f5fc11d1338c36a607e0b81bf93",
+        "rev": "805c580fac2e06235a66e0a2d5ebfdf6ba497ac4",
         "type": "github"
       },
       "original": {
         "owner": "Takuya-Mukai",
-        "ref": "v0.1.1",
+        "ref": "v0.2.0",
         "repo": "jovian.nvim",
         "type": "github"
       }
