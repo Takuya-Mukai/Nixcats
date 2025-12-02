@@ -25,7 +25,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixCats.url = "github:BirdeeHub/nixCats-nvim";
     jovian-nvim = {
-      url = "github:Takuya-Mukai/jovian.nvim/v0.2.0";
+      url = "github:m-tky/jovian.nvim";
       flake = false;
     };
     jupytext-nvim = {

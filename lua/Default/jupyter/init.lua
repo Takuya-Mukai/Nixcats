@@ -16,6 +16,33 @@ require("lze").load({
 				preview_image_ratio = 0.3,
 			})
 		end,
+		keys = {
+			{ "<leader>jt", "<cmd>JovianToggle<cr>", desc = "Open Jovian UI" },
+
+			{ "<leader>jr", "<cmd>JovianRun<cr>", desc = "Run Current Cell" },
+			{ "<leader>jn", "<cmd>JovianRunAndNext<cr>", desc = "Run Cell and Next" },
+			{ "<leader>ja", "<cmd>JovianRunAll<cr>", desc = "Run All Cells" },
+			{ "<leader>jl", "<cmd>JovianRunLine<cr>", desc = "Run Current Line" },
+			{ "<leader>jv", "<cmd>JovianSendSelection<cr>", desc = "Run Visual Selection" },
+
+			{ "<leader>js", "<cmd>JovianStart<cr>", desc = "Start Kernel" },
+			{ "<leader>jk", "<cmd>JovianRestart<cr>", desc = "Restart Kernel" },
+			{ "<leader>ji", "<cmd>JovianInterrupt<cr>", desc = "Interrupt Execution" },
+
+			{ "<leader>jj", "<cmd>JovianNextCell<cr>", desc = "Next Cell" },
+			{ "<leader>jk", "<cmd>JovianPrevCell<cr>", desc = "Previous Cell" },
+			{ "<leader>jA", "<cmd>JovianNewCellAbove<cr>", desc = "New Cell Above" },
+			{ "<leader>jB", "<cmd>JovianNewCellBelow<cr>", desc = "New Cell Below" },
+			{ "<leader>jd", "<cmd>JovianDeleteCell<cr>", desc = "Delete Current Cell" },
+			{ "<leader>jK", "<cmd>JovianMoveCellUp<cr>", desc = "Move Cell Up" },
+			{ "<leader>jJ", "<cmd>JovianMoveCellDown<cr>", desc = "Move Cell Down" },
+			{ "<leader>jm", "<cmd>JovianMergeBelow<cr>", desc = "Merge with Below" },
+			{ "<leader>js", "<cmd>JovianSplitCell<cr>", desc = "Split Cell at Cursor" },
+
+			{ "<leader>jV", "<cmd>JovianVars<cr>", desc = "Show Variables" },
+			{ "<leader>jD", "<cmd>JovianDoc<cr>", desc = "Inspect Object Docstring" },
+			{ "<leader>jP", "<cmd>JovianPeek<cr>", desc = "Peek Object Info" },
+		},
 	},
 	{
 		"image.nvim",
@@ -30,69 +57,60 @@ require("lze").load({
 			})
 		end,
 	},
-	-- 	{
-	-- 		"hydra.nvim",
-	-- 		after = function()
-	-- 			local hydra = require("hydra")
-	-- 			local jukit_cell = require("jukit.core.cells")
-	-- 			local jukit_send = require("jukit.core.send")
-	-- 			hydra({
-	-- 				name = "JupyterNavigator",
-	-- 				hint = [[
-	-- _J_/_K_: move down/up  _r_: run cell _l_: send line
-	--     _v_: run visual  _a_: run all]],
-	-- 				config = {
-	-- 					color = "pink",
-	-- 					invoke_on_body = true,
-	-- 					hint = {
-	-- 						float_opts = {
-	-- 							border = "rounded", -- you can change the border if you want
-	-- 						},
-	-- 					},
-	-- 				},
-	-- 				mode = { "n" },
-	-- 				body = "<localleader>j", -- this is the key that triggers the hydra
-	-- 				heads = {
-	-- 					{
-	-- 						"J",
-	-- 						function()
-	-- 							jukit_cell.jump_to_next()
-	-- 						end,
-	-- 					},
-	-- 					{
-	-- 						"K",
-	-- 						function()
-	-- 							jukit_cell.jump_to_previous()
-	-- 						end,
-	-- 					},
-	-- 					{
-	-- 						"r",
-	-- 						function()
-	-- 							jukit_send.send_cell()
-	-- 						end,
-	-- 					},
-	-- 					{
-	-- 						"l",
-	-- 						function()
-	-- 							jukit_send.send_line()
-	-- 						end,
-	-- 					},
-	-- 					{
-	-- 						"v",
-	-- 						function()
-	-- 							jukit_send.send_selection()
-	-- 						end,
-	-- 					},
-	-- 					{
-	-- 						"a",
-	-- 						function()
-	-- 							require("jukit.terminals.kitty").run_all_cells()
-	-- 						end,
-	-- 					},
-	-- 					{ "<esc>", nil, { exit = true } },
-	-- 					{ "q", nil, { exit = true } },
-	-- 				},
-	-- 			})
-	-- 		end,
-	-- 	},
+	{
+		"hydra.nvim",
+		after = function()
+			local hydra = require("hydra")
+			hydra({
+				name = "Jupyter",
+				hint = [[
+  _J_/_K_: move down/up  _r_: run cell _l_: send line
+_v_: run visual  _c_: new code cell _m_: new markdown cell
+]],
+				config = {
+					color = "pink",
+					invoke_on_body = true,
+					hint = {
+						float_opts = {
+							border = "rounded", -- you can change the border if you want
+						},
+					},
+				},
+				mode = { "n" },
+				body = "<localleader>j", -- this is the key that triggers the hydra
+				heads = {
+					{
+						"J",
+						"JovianNextCel",
+					},
+					{
+						"K",
+						"JovianPrevCell",
+					},
+					{
+						"R",
+						"JovianRun",
+					},
+					{
+						"l",
+						"JovianRunLine",
+					},
+					{
+						"v",
+						"JovianSendSelection",
+					},
+					{
+						"c",
+						"JovianNewCellBelow",
+					},
+					{
+						"m",
+						"JovianNewMarkdownCellBelow",
+					},
+					{ "<esc>", nil, { exit = true } },
+					{ "q", nil, { exit = true } },
+				},
+			})
+		end,
+	},
 })
