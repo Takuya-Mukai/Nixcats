@@ -35,8 +35,11 @@ require("catppuccin").setup({
 vim.api.nvim_create_autocmd("ColorScheme", {
 	pattern = "*",
 	callback = function()
+		vim.api.nvim_set_hl(0, "Normal", { bg = "none", nocombine = true })
+		vim.api.nvim_set_hl(0, "NormalNC", { bg = "none", nocombine = true })
 		vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none", nocombine = true })
 		vim.api.nvim_set_hl(0, "FloatBorder", { bg = "none", nocombine = true })
+		vim.api.nvim_set_hl(0, "Pmenu", { bg = "none", nocombine = true })
 		vim.api.nvim_set_hl(0, "PmenuSbar", { bg = "none", nocombine = true })
 		vim.api.nvim_set_hl(0, "PmenuThumb", { bg = "none", nocombine = true })
 
@@ -54,38 +57,11 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 		vim.api.nvim_set_hl(0, "BlinkCmpScrollBarGutter", { bg = "none", nocombine = true })
 
 		-- noice.nvim
-		-- vim.api.nvim_set_hl(0, "NoiceCmdlineMsgArea", { bg = "none", nocombine = true })
-		-- vim.api.nvim_set_hl(0, "NoiceCmdlinePopupNormal", { bg = "none", nocombine = true })
-		-- vim.api.nvim_set_hl(0, "NoiceMiniMsgArea", { bg = "none", nocombine = true })
-		--
-		-- -- 2. ポップアップとスプリットビューの背景
-		-- vim.api.nvim_set_hl(0, "NoicePopupNormal", { bg = "none", nocombine = true })
-		-- vim.api.nvim_set_hl(0, "NoiceSplitNormal", { bg = "none", nocombine = true })
-		--
-		-- -- 3. 枠線とタイトルの背景をまとめて透明化
-		-- -- 汎用的な枠線
-		-- vim.api.nvim_set_hl(0, "NoicePopupBorder", { bg = "none", nocombine = true })
-		-- vim.api.nvim_set_hl(0, "NoiceSplitBorder", { bg = "none", nocombine = true })
-		-- vim.api.nvim_set_hl(0, "NoiceCmdlinePopupBorder", { bg = "none", nocombine = true })
-		--
-		-- -- コマンドラインのタイトル/プロンプトの背景
-		-- vim.api.nvim_set_hl(0, "NoiceCmdlinePopupTitle", { bg = "none", nocombine = true })
-		-- vim.api.nvim_set_hl(0, "NoiceCmdlinePromptTitle", { bg = "none", nocombine = true })
-		--
-		-- -- 以下の具体的な枠線グループもまとめて設定し、確実に上書き
-		-- vim.api.nvim_set_hl(0, "NoiceCmdlinePopupBorderCalculator", { bg = "none", nocombine = true })
-		-- vim.api.nvim_set_hl(0, "NoiceCmdlinePopupBorderCmdline", { bg = "none", nocombine = true })
-		-- vim.api.nvim_set_hl(0, "NoiceCmdlinePopupBorderFilter", { bg = "none", nocombine = true })
-		-- vim.api.nvim_set_hl(0, "NoiceCmdlinePopupBorderHelp", { bg = "none", nocombine = true })
-		-- vim.api.nvim_set_hl(0, "NoiceCmdlinePopupBorderIncRename", { bg = "none", nocombine = true })
-		-- vim.api.nvim_set_hl(0, "NoiceCmdlinePopupBorderInput", { bg = "none", nocombine = true })
-		-- vim.api.nvim_set_hl(0, "NoiceCmdlinePopupBorderLua", { bg = "none", nocombine = true })
-		-- vim.api.nvim_set_hl(0, "NoiceCmdlinePopupBorderSearch", { bg = "none", nocombine = true })
-		--
-		-- -- Pmenu関連（補完メニューの枠線）
-		-- vim.api.nvim_set_hl(0, "NoicePopupmenuBorder", { bg = "none", nocombine = true })
-		-- vim.api.nvim_set_hl(0, "NoiceScrollbarPmenuSbar", { bg = "none", nocombine = true })
-		-- vim.api.nvim_set_hl(0, "NoiceScrollbarThumbPmenuThumb", { bg = "none", nocombine = true })
+		vim.api.nvim_set_hl(0, "NoiceCmdline", { bg = "none", nocombine = true })
+		vim.api.nvim_set_hl(0, "NoiceMini", { bg = "none", nocombine = true })
+
+		vim.api.nvim_set_hl(0, "WhichKey", { bg = "none", nocombine = true })
+		vim.api.nvim_set_hl(0, "WhichKeyBorder", { bg = "none", nocombine = true })
 	end,
 })
 vim.cmd.colorscheme(colorschemeName)
