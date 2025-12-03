@@ -18,6 +18,8 @@ require("lze").load({
 		end,
 		keys = {
 			{ "<leader>jt", "<cmd>JovianToggle<cr>", desc = "Open Jovian UI" },
+			{ "<leader>jc", "<cmd>JovianClear<cr>", desc = "Clear REPL" },
+			{ "<leader>jp", "<cmd>JovianTogglePlot<cr>", desc = "Toggle Plot" },
 
 			{ "<leader>jr", "<cmd>JovianRun<cr>", desc = "Run Current Cell" },
 			{ "<leader>jn", "<cmd>JovianRunAndNext<cr>", desc = "Run Cell and Next" },
@@ -28,6 +30,7 @@ require("lze").load({
 			{ "<leader>js", "<cmd>JovianStart<cr>", desc = "Start Kernel" },
 			{ "<leader>jk", "<cmd>JovianRestart<cr>", desc = "Restart Kernel" },
 			{ "<leader>ji", "<cmd>JovianInterrupt<cr>", desc = "Interrupt Execution" },
+			{ "<leader>jC", "<cmd>JovianCleanCache<cr>", desc = "Clean Cache" },
 
 			{ "<leader>jj", "<cmd>JovianNextCell<cr>", desc = "Next Cell" },
 			{ "<leader>jk", "<cmd>JovianPrevCell<cr>", desc = "Previous Cell" },
@@ -64,8 +67,8 @@ require("lze").load({
 			hydra({
 				name = "Jupyter",
 				hint = [[
-  _J_/_K_: move down/up  _r_: run cell _l_: send line
-_v_: run visual  _c_: new code cell _m_: new markdown cell
+  _J_/_K_: move down/up  _R_: run cell _L_: send line
+_S_: run visual  _C_: new code cell _M_: new markdown cell
 ]],
 				config = {
 					color = "pink",
@@ -79,34 +82,13 @@ _v_: run visual  _c_: new code cell _m_: new markdown cell
 				mode = { "n" },
 				body = "<localleader>j", -- this is the key that triggers the hydra
 				heads = {
-					{
-						"J",
-						"JovianNextCel",
-					},
-					{
-						"K",
-						"JovianPrevCell",
-					},
-					{
-						"R",
-						"JovianRun",
-					},
-					{
-						"l",
-						"JovianRunLine",
-					},
-					{
-						"v",
-						"JovianSendSelection",
-					},
-					{
-						"c",
-						"JovianNewCellBelow",
-					},
-					{
-						"m",
-						"JovianNewMarkdownCellBelow",
-					},
+					{ "J", "JovianNextCel" },
+					{ "K", "JovianPrevCell" },
+					{ "R", "JovianRun" },
+					{ "L", "JovianRunLine" },
+					{ "S", "JovianSendSelection" },
+					{ "C", "JovianNewCellBelow" },
+					{ "M", "JovianNewMarkdownCellBelow" },
 					{ "<esc>", nil, { exit = true } },
 					{ "q", nil, { exit = true } },
 				},
