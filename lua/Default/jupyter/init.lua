@@ -7,14 +7,9 @@ require("lze").load({
 	},
 	{
 		"jovian-nvim",
-		dep_of = { "hydra.nvim" },
 		ft = { "python" },
 		after = function()
-			require("jovian").setup({
-				preview_width_percent = 30,
-				repl_height_percent = 30,
-				preview_image_ratio = 0.3,
-			})
+			require("jovian").setup({})
 		end,
 		keys = {
 			{ "<leader>jt", "<cmd>JovianToggle<cr>", desc = "Open Jovian UI" },
