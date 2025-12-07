@@ -142,27 +142,45 @@ require("lze").load({
 	--   },
 	-- },
 	{
-		"nvim-treesitter",
+		"nvim-treesitter-integrated",
 		dep_of = {
 			"nvim-treesitter-textobjects",
 			"nvim-treesitter-context",
 			"rainbow-delimiters.nvim",
 		},
 		after = function(_)
-			require("nvim-treesitter").setup({})
+			require("nvim-treesitter").setup({
+				install_dir = require("nixCats").settings.treesitterParserPath,
+			})
+			local function enable_treesitter_features()
+				-- 1. 現在のバッファIDを取得
+				local bufnr = vim.api.nvim_get_current_buf()
+
+				-- 2. ハイライトを有効化: 廃止された highlight = { enable = true } の代替
+				--     pcall(vim.treesitter.start) ではなく、バッファIDを渡してハイライトを起動
+				pcall(vim.treesitter.start, bufnr)
+
+				-- 3. 折りたたみ機能を有効化 (pcallで安全に実行)
+				pcall(function()
+					-- Treesitterが対応していないファイルタイプでエラーが出ないように pcall でラップ
+					vim.wo[bufnr].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+					vim.wo[bufnr].foldmethod = "expr"
+					vim.wo[bufnr].foldlevel = 99
+				end)
+
+				-- 4. インデント機能を有効化 (pcallで安全に実行)
+				pcall(function()
+					-- 廃止された indent = { enable = true } の代替
+					vim.bo[bufnr].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+				end)
+			end
+
+			-- 5. ★ autocmd の設定（augroup を使って重複を避ける）
+			local group = vim.api.nvim_create_augroup("MyTreesitterSetup", { clear = true })
 			vim.api.nvim_create_autocmd("FileType", {
+				group = group,
 				pattern = { "*" },
-				callback = function()
-					pcall(vim.treesitter.start)
-					pcall(function()
-						vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-						vim.wo.foldmethod = "expr"
-						vim.wo.foldlevel = 99
-					end)
-					pcall(function()
-						vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-					end)
-				end,
+				callback = enable_treesitter_features,
 			})
 		end,
 	},
