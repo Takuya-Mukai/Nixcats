@@ -74,6 +74,34 @@ require("lze").load({
 		"nvim-lspconfig",
 		event = "LspAttach",
 		after = function(_)
+			vim.diagnostic.config({
+				signs = {
+					text = {
+						[vim.diagnostic.severity.ERROR] = " ",
+						[vim.diagnostic.severity.WARN] = " ",
+						[vim.diagnostic.severity.INFO] = " ",
+						[vim.diagnostic.severity.HINT] = " ",
+					},
+				},
+				underline = true,
+				virtual_text = true,
+				virtual_line = false,
+				update_in_insert = false,
+				severity_sort = true,
+				float = {
+					border = "single",
+					title = "Diagnostics",
+					header = {},
+					suffix = {},
+					format = function(diag)
+						if diag.code then
+							return string.format("[%s](%s): %s", diag.source, diag.code, diag.message)
+						else
+							return string.format("[%s]: %s", diag.source, diag.message)
+						end
+					end,
+				},
+			})
 			local LspList = {
 				"pyright",
 				"ruff",

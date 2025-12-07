@@ -25,25 +25,21 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixCats.url = "github:BirdeeHub/nixCats-nvim";
     jovian-nvim = {
-      url = "github:m-tky/jovian.nvim";
+      url = "git+https://github.com/m-tky/jovian.nvim?ref=dev";
       flake = false;
     };
     jupytext-nvim = {
       url = "github:GCBallesteros/jupytext.nvim";
       flake = false;
     };
-    # websocket-nvim = {
-    #   url = "github:AbaoFromCUG/websocket.nvim";
-    #   flake = false;
-    # };
-    # neopyter-nvim = {
-    #   url = "github:SUSTech-data/neopyter";
-    #   flake = false;
-    # };
-    # nvim-treesitter = {
-    #   url = "github:nvim-treesitter/nvim-treesitter";
-    #   flake = false;
-    # };
+    nvim-treesitter = {
+      url = "git+https://github.com/nvim-treesitter/nvim-treesitter?ref=main";
+      flake = false;
+    };
+    nvim-treesitter-textobjects = {
+      url = "git+https://github.com/nvim-treesitter/nvim-treesitter-textobjects?ref=main";
+      flake = false;
+    };
 
     # see :help nixCats.flake.inputs
     # If you want your plugin to be loaded by the standard overlay,
@@ -266,26 +262,42 @@
           # `:NixCats pawsible` command to see them all
           optionalPlugins = {
             # あなたのカテゴリ分けに合わせてプラグインを配置
-            ui = with pkgs.vimPlugins; [
-              # treesitter本体と関連プラグイン
-              nvim-treesitter
-              nvim-treesitter.withAllGrammars
-              nvim-treesitter-context
-              nvim-treesitter-textobjects
-              nvim-treesitter-refactor
+            ui =
+              with pkgs.vimPlugins;
+              [
+                # treesitter本体と関連プラグイン
+                transparent-nvim
+                nvim-treesitter.withAllGrammars
+                nvim-treesitter-context
 
-              rainbow-delimiters-nvim
-              smear-cursor-nvim
-              nvim-highlight-colors
-              gitsigns-nvim
-              git-conflict-nvim
-              lualine-nvim
-              neoscroll-nvim
-              nvim-web-devicons
-              nvim-scrollview
-              hlchunk-nvim
-              # hlargs-nvim
-            ];
+                rainbow-delimiters-nvim
+                smear-cursor-nvim
+                nvim-highlight-colors
+                gitsigns-nvim
+                git-conflict-nvim
+                lualine-nvim
+                neoscroll-nvim
+                nvim-web-devicons
+                nvim-scrollview
+                hlchunk-nvim
+                hlargs-nvim
+              ]
+              ++ [
+                (pkgs.vimUtils.buildVimPlugin {
+                  pname = "nvim-treesitter";
+                  version = "git";
+                  src = inputs.nvim-treesitter;
+                  doCheck = false;
+                })
+              ]
+              ++ [
+                (pkgs.vimUtils.buildVimPlugin {
+                  pname = "nvim-treesitter-textobjects";
+                  version = "git";
+                  src = inputs.nvim-treesitter-textobjects;
+                  doCheck = false;
+                })
+              ];
 
             edit = with pkgs.vimPlugins; [
               comment-nvim
@@ -335,10 +347,6 @@
             lang = {
               typst = [
                 pkgs.vimPlugins.typst-preview-nvim
-                # (pkgs.vimPlugins.typst-preview-nvim.overrideAttrs (_: {
-                #   # ビルドに必要な依存関係を追加
-                #   nativeBuildInputs = [ pkgs.cargo pkgs.rustc ];
-                # }))
               ];
               markdown = [
                 pkgs.vimPlugins.render-markdown-nvim
@@ -357,10 +365,6 @@
                   version = "git";
                   src = inputs.jovian-nvim;
                   doCheck = false;
-                  # patches = [
-                  #   ./fix-encodings-path.patch
-                  #   ./patch4helpers.patch
-                  # ];
                 })
               ]
               ++ [
@@ -370,22 +374,6 @@
                   src = inputs.jupytext-nvim;
                 })
               ];
-            # ++ [
-            #   (pkgs.vimUtils.buildVimPlugin {
-            #     pname = "websocket-nvim";
-            #     version = "git";
-            #     src = inputs.websocket-nvim;
-            #     doCheck = false;
-            #   })
-            # ]
-            # ++ [
-            #   (pkgs.vimUtils.buildVimPlugin {
-            #     pname = "neopyter-nvim";
-            #     version = "git";
-            #     src = inputs.neopyter-nvim;
-            #     doCheck = false;
-            #   })
-            # ];
 
             cmp = with pkgs.vimPlugins; [
               friendly-snippets
