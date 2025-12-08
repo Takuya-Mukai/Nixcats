@@ -134,7 +134,7 @@
                 nvimSkipModules = [ "nvim-treesitter._meta.parsers" ];
               };
 
-              allParsers = pkgs.vimPlugins.nvim-treesitter.withAllGrammars.dependencies;
+              # allParsers = pkgs.vimPlugins.nvim-treesitter.withAllGrammars.dependencies;
 
             in
             # ここが重要！symlinkJoinの結果だけを返す
@@ -142,7 +142,7 @@
               name = "nvim-treesitter-integrated";
               paths = pkgs.lib.flatten [
                 nvimTreesitterMain
-                allParsers
+                # allParsers
               ];
             };
         in
@@ -168,6 +168,7 @@
               delta
               sqlite
               imagemagick
+              tree-sitter
             ];
 
             python = with pkgs; [
