@@ -3,11 +3,11 @@
     "jovian-nvim": {
       "flake": false,
       "locked": {
-        "lastModified": 1765177068,
-        "narHash": "sha256-V9Kmi/9AX4Hre9aYVgvHb3E8aLjIU6DYOTP0PMnjkmE=",
+        "lastModified": 1765179983,
+        "narHash": "sha256-9H/BGUvhKWfPp7epIiO2QwtwOm81oFCc57c6DKFEfnI=",
         "ref": "dev",
-        "rev": "7b11a52ea8d28c65ab7a7a23cad34018a79b5260",
-        "revCount": 102,
+        "rev": "fc20d0ce953123a6a6821213c30b5e3250d505c7",
+        "revCount": 104,
         "type": "git",
         "url": "https://github.com/m-tky/jovian.nvim"
       },
