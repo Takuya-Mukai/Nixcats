@@ -9,7 +9,15 @@ require("lze").load({
 		"jovian-nvim",
 		ft = { "python" },
 		after = function()
-			require("jovian").setup({})
+			require("jovian").setup({
+				ui_symbols = {
+					running = " ",
+					done = " ",
+					error = " ",
+					interrupted = " ",
+					stale = " ",
+				},
+			})
 		end,
 		keys = {
 			{ "<leader>jt", "<cmd>JovianToggle<cr>", desc = "Open Jovian UI" },
