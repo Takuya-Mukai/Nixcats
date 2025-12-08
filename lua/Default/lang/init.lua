@@ -12,7 +12,7 @@ require("lze").load({
 			require("render-markdown").setup({
 				code = { right_pad = 4, width = "block" },
 				completions = { blink = { enabled = true } },
-				file_types = { "markdown", "python" },
+				file_types = { "markdown", "vimwiki" },
 				heading = {
 					enabled = false,
 					left_pad = 0,

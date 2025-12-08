@@ -194,6 +194,7 @@ require("lze").load({
 				"yaml",
 				"xml",
 			})
+			vim.treesitter.language.register("markdown", "vimwiki")
 			require("nvim-treesitter").setup({
 				install_dir = os.getenv("HOME") .. "/.local/share/nvim/treesitter/parser",
 				-- install_dir = require("nixCats").settings.treesitterParserPath,
