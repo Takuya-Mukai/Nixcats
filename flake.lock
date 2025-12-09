@@ -3,11 +3,11 @@
     "jovian-nvim": {
       "flake": false,
       "locked": {
-        "lastModified": 1765201017,
-        "narHash": "sha256-Twfq52W5oXEZvU84z2haWajXF1eFp2mOjlHqRFH+BKQ=",
+        "lastModified": 1765254373,
+        "narHash": "sha256-tsom5VE6/+uzfJTlqjRLIes+R6hpB4qBUQYmPdA7C60=",
         "ref": "dev",
-        "rev": "9c12ec83f1407181b448916156f45835390d21f8",
-        "revCount": 107,
+        "rev": "0cfe5f70f1c79c9ee32e43b1c9c6a31c03a86d85",
+        "revCount": 109,
         "type": "git",
         "url": "https://github.com/m-tky/jovian.nvim"
       },
@@ -67,11 +67,11 @@
     "nvim-treesitter": {
       "flake": false,
       "locked": {
-        "lastModified": 1765057102,
-        "narHash": "sha256-2eqOrGqOSis9vHmxe2CIxWfbf92b2iOVLxSSfoNKAw8=",
+        "lastModified": 1765201679,
+        "narHash": "sha256-nAwGkv8mthc2DPl3eLxesGlTZv64JCWlKlVJFWFo/rw=",
         "ref": "main",
-        "rev": "20db421f5fba0c23f6a7629af96ba6d4fc531677",
-        "revCount": 6253,
+        "rev": "f47f549f74cea5d5f25a5205c9e127cd882f1d20",
+        "revCount": 6256,
         "type": "git",
         "url": "https://github.com/nvim-treesitter/nvim-treesitter"
       },

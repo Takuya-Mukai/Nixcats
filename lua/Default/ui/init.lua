@@ -151,86 +151,210 @@ require("lze").load({
 	--   },
 	-- },
 	{
-		"nvim-treesitter-integrated",
+		"nvim-treesitter",
+		lazy = true,
+		event = "BufReadPost",
 		dep_of = {
 			"nvim-treesitter-textobjects",
+			"nvim-treesitter-refactor",
 			"nvim-treesitter-context",
 			"rainbow-delimiters.nvim",
 		},
 		after = function(_)
-			require("nvim-treesitter").install({
-				"rust",
-				"javascript",
-				"zig",
-				"python",
-				"c",
-				"cpp",
-				"nix",
-				"bash",
-				"zsh",
-				"markdown",
-				"markdown_inline",
-				"matlab",
-				"lua",
-				"julia",
-				"html",
-				"go",
-				"cmake",
-				"bibtex",
-				"typst",
-				"json",
-				"dockerfile",
-				"css",
-				"gitignore",
-				"gnuplot",
-				"jq",
-				"kitty",
-				"latex",
-				"mermaid",
-				"powershell",
-				"printf",
-				"sql",
-				"tmux",
-				"yaml",
-				"xml",
-			})
-			vim.treesitter.language.register("markdown", "vimwiki")
-			require("nvim-treesitter").setup({
-				install_dir = os.getenv("HOME") .. "/.local/share/nvim/treesitter/parser",
-				-- install_dir = require("nixCats").settings.treesitterParserPath,
-			})
-			local function enable_treesitter_features()
-				-- 1. 現在のバッファIDを取得
-				local bufnr = vim.api.nvim_get_current_buf()
+			require("nvim-treesitter.configs").setup({
+				highlight = { enable = true },
+				indent = { enable = true },
+				refactor = {
+					highlight_current_scope = { enable = true },
+					highlight_definitions = { clear_on_cursor_move = true, enable = true },
+					navigation = {
+						enable = true,
+						keymaps = {
+							goto_definition = "\rgD",
+							goto_definition_lsp_fallback = "\rgd",
+							goto_next_usage = "<a-*>",
+							goto_previous_usage = "<a-#>",
+							list_definitions = "\rlD",
+							list_definitions_toc = "\rld",
+						},
+					},
+					smart_rename = { enable = true, keymaps = { smart_rename = "\rr" } },
+				},
+				textobjects = {
+					select = {
+						enable = true,
 
-				-- 2. ハイライトを有効化: 廃止された highlight = { enable = true } の代替
-				--     pcall(vim.treesitter.start) ではなく、バッファIDを渡してハイライトを起動
-				pcall(vim.treesitter.start, bufnr)
+						-- Automatically jump forward to textobj, similar to targets.vim
+						lookahead = true,
 
-				-- 3. 折りたたみ機能を有効化 (pcallで安全に実行)
-				pcall(function()
-					-- Treesitterが対応していないファイルタイプでエラーが出ないように pcall でラップ
-					vim.wo[bufnr].foldexpr = "v:lua.vim.treesitter.foldexpr()"
-					vim.wo[bufnr].foldmethod = "expr"
-					vim.wo[bufnr].foldlevel = 99
-				end)
+						keymaps = {
+							-- You can use the capture groups defined in textobjects.scm
+							["af"] = { query = "@function.outer", desc = "Select outer part of a function region" },
+							["if"] = { query = "@function.inner", desc = "Select inner part of a function region" },
+							["ac"] = { query = "@class.outer", desc = "Select outer part of a class region" },
+							-- You can optionally set descriptions to the mappings (used in the desc parameter of
+							-- nvim_buf_set_keymap) which plugins like which-key display
+							["ic"] = { query = "@class.inner", desc = "Select inner part of a class region" },
+							-- You can also use captures from other query groups like `locals.scm`
+							["as"] = { query = "@local.scope", query_group = "locals", desc = "Select language scope" },
+						},
+						-- You can choose the select mode (default is charwise 'v')
+						--
+						-- Can also be a function which gets passed a table with the keys
+						-- * query_string: eg '@function.inner'
+						-- * method: eg 'v' or 'o'
+						-- and should return the mode ('v', 'V', or '<c-v>') or a table
+						-- mapping query_strings to modes.
+						selection_modes = {
+							["@parameter.outer"] = "v", -- charwise
+							["@function.outer"] = "V", -- linewise
+							["@class.outer"] = "<c-v>", -- blockwise
+						},
+						-- If you set this to `true` (default is `false`) then any textobject is
+						-- extended to include preceding or succeeding whitespace. Succeeding
+						-- whitespace has priority in order to act similarly to eg the built-in
+						-- `ap`.
+						--
+						-- Can also be a function which gets passed a table with the keys
+						-- * query_string: eg '@function.inner'
+						-- * selection_mode: eg 'v'
+						-- and should return true or false
+						include_surrounding_whitespace = true,
+					},
 
-				-- 4. インデント機能を有効化 (pcallで安全に実行)
-				pcall(function()
-					-- 廃止された indent = { enable = true } の代替
-					vim.bo[bufnr].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-				end)
-			end
+					move = {
+						enable = true,
+						set_jumps = true, -- whether to set jumps in the jumplist
+						goto_next_start = {
+							["]m"] = { query = "@function.outer", desc = "Next function start" },
+							["]]"] = { query = "@class.outer", desc = "Next class start" },
+							--
+							-- You can use regex matching (i.e. lua pattern) and/or pass a list in a "query" key to group multiple queries.
+							["]o"] = { query = "@loop.*", desc = "Next loop start" },
+							-- ["]o"] = { query = { "@loop.inner", "@loop.outer" } }
+							--
+							-- You can pass a query group to use query from `queries/<lang>/<query_group>.scm file in your runtime path.
+							-- Below example nvim-treesitter's `locals.scm` and `folds.scm`. They also provide highlights.scm and indent.scm.
+							["]s"] = { query = "@local.scope", query_group = "locals", desc = "Next scope" },
+							["]z"] = { query = "@fold", query_group = "folds", desc = "Next fold" },
+						},
+						goto_next_end = {
+							["]M"] = { query = "@function.outer", desc = "Next function end" },
+							["]["] = { query = "@class.outer", desc = "Next class end" },
+						},
+						goto_previous_start = {
+							["[m"] = { query = "@function.outer", desc = "Previous function start" },
+							["[["] = { query = "@class.outer", desc = "Previous class start" },
+						},
+						goto_previous_end = {
+							["[M"] = { query = "@function.outer", desc = "Previous function end" },
+							["[]"] = { query = "@class.outer", desc = "Previous class end" },
+						},
+						-- Below will go to either the start or the end, whichever is closer.
+						-- Use if you want more granular movements
+						-- Make it even more gradual by adding multiple queries and regex.
+						goto_next = {
+							["]d"] = { query = "@conditional.outer", desc = "Next closer start or end" },
+						},
+						goto_previous = {
+							["[d"] = { query = "@conditional.outer", desc = "Previous closer start or end" },
+						},
+					},
 
-			-- 5. ★ autocmd の設定（augroup を使って重複を避ける）
-			local group = vim.api.nvim_create_augroup("MyTreesitterSetup", { clear = true })
-			vim.api.nvim_create_autocmd("FileType", {
-				group = group,
-				pattern = { "*" },
-				callback = enable_treesitter_features,
+					lsp_interop = {
+						enable = true, -- 機能を有効化
+						border = "rounded", -- フロートウィンドウの枠線スタイル
+						floating_preview_opts = {}, -- `:h vim.lsp.util.open_floating_preview()` に渡すオプション
+						peek_definition_code = {
+							["<leader>df"] = { query = "@function.outer", desc = "Peek function definition" }, -- 関数の定義を「チラ見」する
+							["<leader>dF"] = { "@class.outer", desc = "Peek class definition" },
+						},
+					},
+				},
 			})
 		end,
 	},
+	-- {
+	-- 	"nvim-treesitter-integrated",
+	-- 	dep_of = {
+	-- 		"nvim-treesitter-textobjects",
+	-- 		"nvim-treesitter-context",
+	-- 		"rainbow-delimiters.nvim",
+	-- 	},
+	-- 	after = function(_)
+	-- 		require("nvim-treesitter").install({
+	-- 			"rust",
+	-- 			"javascript",
+	-- 			"zig",
+	-- 			"python",
+	-- 			"c",
+	-- 			"cpp",
+	-- 			"nix",
+	-- 			"bash",
+	-- 			"zsh",
+	-- 			"markdown",
+	-- 			"markdown_inline",
+	-- 			"matlab",
+	-- 			"lua",
+	-- 			"julia",
+	-- 			"html",
+	-- 			"go",
+	-- 			"cmake",
+	-- 			"bibtex",
+	-- 			"typst",
+	-- 			"json",
+	-- 			"dockerfile",
+	-- 			"css",
+	-- 			"gitignore",
+	-- 			"gnuplot",
+	-- 			"jq",
+	-- 			"kitty",
+	-- 			"latex",
+	-- 			"mermaid",
+	-- 			"powershell",
+	-- 			"printf",
+	-- 			"sql",
+	-- 			"tmux",
+	-- 			"yaml",
+	-- 			"xml",
+	-- 		})
+	-- 		vim.treesitter.language.register("markdown", "vimwiki")
+	-- 		require("nvim-treesitter").setup({
+	-- 			install_dir = os.getenv("HOME") .. "/.local/share/nvim/treesitter/parser",
+	-- 			-- install_dir = require("nixCats").settings.treesitterParserPath,
+	-- 		})
+	-- 		local function enable_treesitter_features()
+	-- 			-- 1. 現在のバッファIDを取得
+	-- 			local bufnr = vim.api.nvim_get_current_buf()
+	--
+	-- 			-- 2. ハイライトを有効化: 廃止された highlight = { enable = true } の代替
+	-- 			--     pcall(vim.treesitter.start) ではなく、バッファIDを渡してハイライトを起動
+	-- 			pcall(vim.treesitter.start, bufnr)
+	--
+	-- 			-- 3. 折りたたみ機能を有効化 (pcallで安全に実行)
+	-- 			pcall(function()
+	-- 				-- Treesitterが対応していないファイルタイプでエラーが出ないように pcall でラップ
+	-- 				vim.wo[bufnr].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+	-- 				vim.wo[bufnr].foldmethod = "expr"
+	-- 				vim.wo[bufnr].foldlevel = 99
+	-- 			end)
+	--
+	-- 			-- 4. インデント機能を有効化 (pcallで安全に実行)
+	-- 			pcall(function()
+	-- 				-- 廃止された indent = { enable = true } の代替
+	-- 				vim.bo[bufnr].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+	-- 			end)
+	-- 		end
+	--
+	-- 		-- 5. ★ autocmd の設定（augroup を使って重複を避ける）
+	-- 		local group = vim.api.nvim_create_augroup("MyTreesitterSetup", { clear = true })
+	-- 		vim.api.nvim_create_autocmd("FileType", {
+	-- 			group = group,
+	-- 			pattern = { "*" },
+	-- 			callback = enable_treesitter_features,
+	-- 		})
+	-- 	end,
+	-- },
 	{
 		"nvim-treesitter-context",
 		event = { "CursorMoved", "CursorMovedI" },
@@ -256,55 +380,113 @@ require("lze").load({
 		"nvim-treesitter-textobjects",
 		event = "BufReadPost",
 		lazy = true,
-		after = function(_)
-			-- configuration
-			require("nvim-treesitter-textobjects").setup({
-				select = {
-					-- Automatically jump forward to textobj, similar to targets.vim
-					lookahead = true,
-					-- You can choose the select mode (default is charwise 'v')
-					--
-					-- Can also be a function which gets passed a table with the keys
-					-- * query_string: eg '@function.inner'
-					-- * method: eg 'v' or 'o'
-					-- and should return the mode ('v', 'V', or '<c-v>') or a table
-					-- mapping query_strings to modes.
-					selection_modes = {
-						["@parameter.outer"] = "v", -- charwise
-						["@function.outer"] = "V", -- linewise
-						["@class.outer"] = "V", -- blockwise
-					},
-					-- If you set this to `true` (default is `false`) then any textobject is
-					-- extended to include preceding or succeeding whitespace. Succeeding
-					-- whitespace has priority in order to act similarly to eg the built-in
-					-- `ap`.
-					--
-					-- Can also be a function which gets passed a table with the keys
-					-- * query_string: eg '@function.inner'
-					-- * selection_mode: eg 'v'
-					-- and should return true of false
-					include_surrounding_whitespace = true,
-				},
-			})
-
-			vim.keymap.set({ "x", "o" }, "af", function()
-				require("nvim-treesitter-textobjects.select").select_textobject("@function.outer", "textobjects")
-			end)
-			vim.keymap.set({ "x", "o" }, "if", function()
-				require("nvim-treesitter-textobjects.select").select_textobject("@function.inner", "textobjects")
-			end)
-			vim.keymap.set({ "x", "o" }, "ac", function()
-				require("nvim-treesitter-textobjects.select").select_textobject("@class.outer", "textobjects")
-			end)
-			vim.keymap.set({ "x", "o" }, "ic", function()
-				require("nvim-treesitter-textobjects.select").select_textobject("@class.inner", "textobjects")
-			end)
-			-- You can also use captures from other query groups like `locals.scm`
-			vim.keymap.set({ "x", "o" }, "as", function()
-				require("nvim-treesitter-textobjects.select").select_textobject("@local.scope", "locals")
-			end)
-		end,
 	},
+	{
+		"nvim-treesitter-refactor",
+		keys = {
+			{
+				"<leader>rgd",
+				function()
+					require("nvim-treesitter-refactor.navigation").goto_definition_lsp_fallback()
+				end,
+				desc = "Go to definition with LSP fallback",
+				mode = "n",
+			},
+			{
+				"<leader>rlD",
+				function()
+					require("nvim-treesitter-refactor.navigation").list_definitions()
+				end,
+				desc = "List definitions",
+				mode = "n",
+			},
+			{
+				"<leader>rld",
+				function()
+					require("nvim-treesitter-refactor.navigation").list_definitions_toc()
+				end,
+				desc = "List definitions TOC",
+				mode = "n",
+			},
+			{
+				"<A-*>",
+				function()
+					require("nvim-treesitter-refactor.navigation").goto_next_usage()
+				end,
+				desc = "Go to next usage",
+				mode = "n",
+			},
+			{
+				"<A-#>",
+				function()
+					require("nvim-treesitter-refactor.navigation").goto_previous_usage()
+				end,
+				desc = "Go to previous usage",
+				mode = "n",
+			},
+			{
+				"<leader>rr",
+				function()
+					require("nvim-treesitter-refactor.smart_rename").smart_rename()
+				end,
+				desc = "Smart Rename",
+				mode = "n",
+			},
+		},
+	},
+	-- {
+	-- 	"nvim-treesitter-textobjects",
+	-- 	event = "BufReadPost",
+	-- 	lazy = true,
+	-- 	after = function(_)
+	-- 		-- configuration
+	-- 		require("nvim-treesitter-textobjects").setup({
+	-- 			select = {
+	-- 				-- Automatically jump forward to textobj, similar to targets.vim
+	-- 				lookahead = true,
+	-- 				-- You can choose the select mode (default is charwise 'v')
+	-- 				--
+	-- 				-- Can also be a function which gets passed a table with the keys
+	-- 				-- * query_string: eg '@function.inner'
+	-- 				-- * method: eg 'v' or 'o'
+	-- 				-- and should return the mode ('v', 'V', or '<c-v>') or a table
+	-- 				-- mapping query_strings to modes.
+	-- 				selection_modes = {
+	-- 					["@parameter.outer"] = "v", -- charwise
+	-- 					["@function.outer"] = "V", -- linewise
+	-- 					["@class.outer"] = "V", -- blockwise
+	-- 				},
+	-- 				-- If you set this to `true` (default is `false`) then any textobject is
+	-- 				-- extended to include preceding or succeeding whitespace. Succeeding
+	-- 				-- whitespace has priority in order to act similarly to eg the built-in
+	-- 				-- `ap`.
+	-- 				--
+	-- 				-- Can also be a function which gets passed a table with the keys
+	-- 				-- * query_string: eg '@function.inner'
+	-- 				-- * selection_mode: eg 'v'
+	-- 				-- and should return true of false
+	-- 				include_surrounding_whitespace = true,
+	-- 			},
+	-- 		})
+	--
+	-- 		vim.keymap.set({ "x", "o" }, "af", function()
+	-- 			require("nvim-treesitter-textobjects.select").select_textobject("@function.outer", "textobjects")
+	-- 		end)
+	-- 		vim.keymap.set({ "x", "o" }, "if", function()
+	-- 			require("nvim-treesitter-textobjects.select").select_textobject("@function.inner", "textobjects")
+	-- 		end)
+	-- 		vim.keymap.set({ "x", "o" }, "ac", function()
+	-- 			require("nvim-treesitter-textobjects.select").select_textobject("@class.outer", "textobjects")
+	-- 		end)
+	-- 		vim.keymap.set({ "x", "o" }, "ic", function()
+	-- 			require("nvim-treesitter-textobjects.select").select_textobject("@class.inner", "textobjects")
+	-- 		end)
+	-- 		-- You can also use captures from other query groups like `locals.scm`
+	-- 		vim.keymap.set({ "x", "o" }, "as", function()
+	-- 			require("nvim-treesitter-textobjects.select").select_textobject("@local.scope", "locals")
+	-- 		end)
+	-- 	end,
+	-- },
 	{
 		"rainbow-delimiters.nvim",
 		after = function(_)

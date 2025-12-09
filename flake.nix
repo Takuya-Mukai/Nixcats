@@ -26,6 +26,7 @@
     nixCats.url = "github:BirdeeHub/nixCats-nvim";
     jovian-nvim = {
       url = "git+https://github.com/m-tky/jovian.nvim?ref=dev";
+      # url = "./jovian.nvim/";
       flake = false;
     };
     jupytext-nvim = {
@@ -286,33 +287,33 @@
           # `:NixCats pawsible` command to see them all
           optionalPlugins = {
 
-            ui =
-              with pkgs.vimPlugins;
-              [
-                transparent-nvim
-                nvim-treesitter-context
-                rainbow-delimiters-nvim
-                smear-cursor-nvim
-                nvim-highlight-colors
-                gitsigns-nvim
-                git-conflict-nvim
-                lualine-nvim
-                neoscroll-nvim
-                nvim-web-devicons
-                nvim-scrollview
-                hlchunk-nvim
-                hlargs-nvim
-              ]
-              ++ [
-                (pkgs.vimUtils.buildVimPlugin {
-                  pname = "nvim-treesitter-textobjects";
-                  version = "git";
-                  src = inputs.nvim-treesitter-textobjects;
-                })
-              ]
-              ++ [
-                mkTsIntegratedPackage
-              ];
+            ui = with pkgs.vimPlugins; [
+              nvim-treesitter-textobjects
+              nvim-treesitter-context
+              nvim-treesitter.withAllGrammars
+              transparent-nvim
+              rainbow-delimiters-nvim
+              smear-cursor-nvim
+              nvim-highlight-colors
+              gitsigns-nvim
+              git-conflict-nvim
+              lualine-nvim
+              neoscroll-nvim
+              nvim-web-devicons
+              nvim-scrollview
+              hlchunk-nvim
+              hlargs-nvim
+            ];
+            # ++ [
+            #   (pkgs.vimUtils.buildVimPlugin {
+            #     pname = "nvim-treesitter-textobjects";
+            #     version = "git";
+            #     src = inputs.nvim-treesitter-textobjects;
+            #   })
+            # ]
+            # ++ [
+            #   mkTsIntegratedPackage
+            # ];
 
             edit = with pkgs.vimPlugins; [
               comment-nvim
@@ -537,7 +538,7 @@
             # see :help nixCats.flake.outputs.packageDefinitions
             settings = {
 
-              treesitterParserPath = "${mkTsIntegratedPackage}/parser";
+              # treesitterParserPath = "${mkTsIntegratedPackage}/parser";
               suffix-path = true;
               suffix-LD = true;
               # The name of the package, and the default launch name,
