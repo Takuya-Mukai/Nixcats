@@ -5,7 +5,7 @@ end
 
 require("catppuccin").setup({
 	flavour = "mocha",
-	transparent_background = true,
+	transparent_background = false,
 	integrations = {
 		aerial = true,
 		blink_cmp = {
@@ -39,6 +39,7 @@ require("lze").load({
 		"transparent.nvim",
 		event = "DeferredUIEnter",
 		after = function()
+			vim.g.transparent_enabled = false
 			require("transparent").setup({
 				-- table: default groups
 				groups = {
