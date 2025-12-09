@@ -3,8 +3,8 @@
     "jovian-nvim": {
       "flake": false,
       "locked": {
-        "lastModified": 1765257221,
-        "narHash": "sha256-J5GWn+G68T380OS+w+mtEbAG76MoXyQ2CUPbSBVfBY4=",
+        "lastModified": 1765260916,
+        "narHash": "sha256-SPxSQXKTZSRs7439r3SJvTrDfY8fRNP9Ci9A/3Mxw6o=",
         "path": "/home/user/Code/jovian.nvim",
         "type": "path"
       },
