@@ -7,6 +7,7 @@ require("lze").load({
 	},
 	{
 		"jovian-nvim",
+		ft = "python",
 		after = function()
 			require("jovian").setup({
 				ui_symbols = {

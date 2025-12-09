@@ -159,6 +159,7 @@ require("lze").load({
 			"nvim-treesitter-refactor",
 			"nvim-treesitter-context",
 			"rainbow-delimiters.nvim",
+			"jovian-nvim",
 		},
 		after = function(_)
 			require("nvim-treesitter.configs").setup({
